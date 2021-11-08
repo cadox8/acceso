@@ -6,35 +6,15 @@ import es.ivan.acceso.utils.Log;
 
 import java.io.*;
 
-public class PropertiesFiles {
-
-    private final FileUtils fileUtils;
+public class PropertiesFiles extends AbstractFile {
 
     /**
      * Constructor principal de la clase.
      * Comprueba si existe la carpeta 'files' y, en el caso de que no exista, la crea
      */
     public PropertiesFiles() {
-        this.fileUtils = new FileUtils();
-
         final File parent = this.fileUtils.getFile(FileType.PROP, "").getParentFile();
         if (!parent.exists()) parent.mkdirs();
-    }
-
-    /**
-     * Muestra el contenido de la carpeta a la que accedemos dependiendo del tipo de búsqueda
-     */
-    public void showFileTree() {
-        this.fileUtils.showFileTree(FileType.PROP);
-    }
-
-    /**
-     * Borra el archivo
-     *
-     * @param fileName El archivo a ser borrado
-     */
-    public void removeFile(String fileName) {
-        this.fileUtils.removeFile(FileType.PROP, fileName);
     }
 
     /**

@@ -1,9 +1,9 @@
 package es.ivan.acceso.menu;
 
 import es.ivan.acceso.files.PropertiesFiles;
+import es.ivan.acceso.files.type.FileType;
 import es.ivan.acceso.utils.Log;
 
-import java.util.InputMismatchException;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -43,12 +43,12 @@ public class PropertiesMenu {
                 case 3:
                     Log.divWithBreak();
                     Log.normal("Escriba el nombre del archivo:");
-                    this.propertiesFiles.removeFile(this.scanner.nextLine());
+                    this.propertiesFiles.removeFile(FileType.PROP, this.scanner.nextLine());
                     Log.div();
                     this.showMenu();
                     break;
                 case 4:
-                    this.propertiesFiles.showFileTree();
+                    this.propertiesFiles.showFileTree(FileType.PROP);
                     break;
                 case 5:
                     this.mainMenu.showMenu();

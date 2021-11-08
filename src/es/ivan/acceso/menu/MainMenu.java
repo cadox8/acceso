@@ -2,8 +2,6 @@ package es.ivan.acceso.menu;
 
 import es.ivan.acceso.utils.Log;
 
-import java.io.IOException;
-import java.util.InputMismatchException;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 

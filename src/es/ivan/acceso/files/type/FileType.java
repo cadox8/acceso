@@ -1,4 +1,4 @@
-package es.ivan.acceso.files.utils;
+package es.ivan.acceso.files.type;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

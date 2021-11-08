@@ -5,19 +5,14 @@ import com.diogonunes.jcdp.color.api.Ansi;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Locale;
-
 public class Log {
 
     @RequiredArgsConstructor
     public enum LogType {
         NORMAL(""),
-        DIV(""),
-        WARNING("[AVISO]"),
-        ERROR("[ERROR]"),
-        DEBUG("[DEBUG]");
+        WARNING("[AVISO] "),
+        ERROR("[ERROR] "),
+        DEBUG("[DEBUG] ");
 
         @Getter private final String prefix;
     }
@@ -68,14 +63,14 @@ public class Log {
      * Muestra el divisor
      */
     public static void div() {
-        log(div, LogType.DIV, "-------------------------------");
+        log(div, LogType.NORMAL, "-------------------------------");
     }
 
     /**
      * Muestra el divisor
      */
     public static void divWithBreak() {
-        log(div, LogType.DIV, "\n\n-------------------------------");
+        log(div, LogType.NORMAL, "\n\n-------------------------------");
     }
 
     /**
@@ -94,6 +89,6 @@ public class Log {
      */
     private static void log(ColoredPrinter printer, LogType type, String text){
         printer.setTimestamping(false);
-        printer.println(type == LogType.DIV ? text : type.getPrefix() + " " + text);
+        printer.println(type.getPrefix() + text);
     }
 }

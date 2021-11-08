@@ -1,7 +1,6 @@
 package es.ivan.acceso.files;
 
-import es.ivan.acceso.files.utils.FileType;
-import es.ivan.acceso.files.utils.FileUtils;
+import es.ivan.acceso.files.type.FileType;
 import es.ivan.acceso.utils.Log;
 
 import java.io.*;
@@ -13,7 +12,7 @@ public class PropertiesFiles extends AbstractFile {
      * Comprueba si existe la carpeta 'files' y, en el caso de que no exista, la crea
      */
     public PropertiesFiles() {
-        final File parent = this.fileUtils.getFile(FileType.PROP, "").getParentFile();
+        final File parent = this.getFile(FileType.PROP, "").getParentFile();
         if (!parent.exists()) parent.mkdirs();
     }
 
@@ -23,7 +22,7 @@ public class PropertiesFiles extends AbstractFile {
      * @param fileName El archivo a buscar
      */
     public void showFileInfo(String fileName) {
-        final File file = this.fileUtils.getFile(FileType.PROP, fileName);
+        final File file = this.getFile(FileType.PROP, fileName);
 
         if (file.exists()) {
             try {
@@ -46,7 +45,7 @@ public class PropertiesFiles extends AbstractFile {
      * @param content El contenido a ser guardado
      */
     public void saveFile(String fileName, String content) {
-        final File file = this.fileUtils.getFile(FileType.PROP, fileName);
+        final File file = this.getFile(FileType.PROP, fileName);
 
         if (!file.exists()) {
             try {

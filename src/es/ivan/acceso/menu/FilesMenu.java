@@ -78,12 +78,8 @@ public class FilesMenu {
                 default:
                     throw new NoSuchElementException();
             }
-        } catch (InputMismatchException | NumberFormatException e) {
+        } catch (NumberFormatException | NoSuchElementException e) {
             Log.error("No has pasado un argumento valido");
-            Log.clear();
-            this.showMenu();
-        } catch (NoSuchElementException e) {
-            Log.error("No has pasado un argumento");
             Log.clear();
             this.showMenu();
         }

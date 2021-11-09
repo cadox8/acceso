@@ -4,6 +4,10 @@ import es.ivan.acceso.files.type.FileType;
 import es.ivan.acceso.utils.Log;
 
 import java.io.*;
+import java.text.FieldPosition;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Properties;
 
 public class PropertiesFiles extends AbstractFile {
 
@@ -27,14 +31,21 @@ public class PropertiesFiles extends AbstractFile {
         if (file.exists()) {
             try {
                 System.out.println("\n");
-                final BufferedReader br = new BufferedReader(new FileReader(file));
-                String line;
-                while((line = br.readLine()) != null) System.out.println(line);
+                final FileReader reader = new FileReader(file);
+                final Properties properties = new Properties();
+                properties.load(reader);
+
+                final Enumeration<Object> keys = properties.keys();
+                while (keys.hasMoreElements()){
+                    final Object key = keys.nextElement();
+                    System.out.println(key + "=" + properties.get(key));
+                }
+                reader.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         } else {
-            Log.error("No existe un archivo llamado " + fileName + ".propierties");
+            Log.error("No existe un archivo llamado " + fileName + ".properties");
         }
     }
 
@@ -42,18 +53,29 @@ public class PropertiesFiles extends AbstractFile {
      * Escribe el contenido dentro del archivo
      *
      * @param fileName El archivo donde guardar el contenido
-     * @param content El contenido a ser guardado
+     * @param proper
      */
-    public void saveFile(String fileName, String content) {
+    public void saveFile(String fileName, HashMap<String, String> proper) {
         final File file = this.getFile(FileType.PROP, fileName);
 
         if (!file.exists()) {
             try {
-                final BufferedWriter br = new BufferedWriter(new FileWriter(file));
+                file.createNewFile();
 
-                br.write(content);
-                br.flush();
-                br.close();
+                final FileReader reader = new FileReader(file);
+                final FileWriter writer = new FileWriter(file);
+
+                final Properties properties = new Properties();
+                properties.load(reader);
+                proper.keySet().forEach(k -> properties.setProperty(k, proper.get(k)));
+                properties.store(writer, "Archivo creado mediante app de Iván");
+
+                //
+                reader.close();
+                writer.flush();
+                writer.close();
+                //
+
                 Log.normal("Archivo guardado");
             } catch (IOException e) {
                 e.printStackTrace();

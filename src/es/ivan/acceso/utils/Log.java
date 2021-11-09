@@ -24,36 +24,36 @@ public class Log {
     private static final ColoredPrinter div = new ColoredPrinter.Builder(1, true).foreground(Ansi.FColor.CYAN).build();
 
     /**
-     * Logs the info as Debug
+     * Logs como debug
      *
-     * @param info The object to be logged
+     * @param info el mensaje
      */
     public static void log(String info){
         log(debug, LogType.DEBUG, info);
     }
 
     /**
-     * Logs the info as Danger
+     * Logs como error
      *
-     * @param info The object to be logged
+     * @param info el mensaje
      */
     public static void error(String info) {
         log(error, LogType.ERROR, info);
     }
 
     /**
-     * Logs the info as Warning
+     * Logs como aviso
      *
-     * @param info The object to be logged
+     * @param info el mensaje
      */
     public static void warning(String info) {
         log(warning, LogType.WARNING, info);
     }
 
     /**
-     * Logs the info as Normal
+     * Logs normal
      *
-     * @param info The object to be logged
+     * @param info el mensaje
      */
     public static void normal(String info) {
         log(normal, LogType.NORMAL, info);
@@ -81,14 +81,14 @@ public class Log {
     }
 
     /**
-     * Logs the info as the type you select
+     * Logs the info
      * @see LogType
      *
-     * @param type The log type
-     * @param text The object to be logged
+     * @param type el tipo
+     * @param info el mensaje
      */
-    private static void log(ColoredPrinter printer, LogType type, String text){
+    private static void log(ColoredPrinter printer, LogType type, String info){
         printer.setTimestamping(false);
-        printer.println(type.getPrefix() + text);
+        printer.println(type.getPrefix() + info);
     }
 }

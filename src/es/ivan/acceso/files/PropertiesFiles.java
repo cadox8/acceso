@@ -4,7 +4,6 @@ import es.ivan.acceso.files.type.FileType;
 import es.ivan.acceso.utils.Log;
 
 import java.io.*;
-import java.text.FieldPosition;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Properties;
@@ -38,9 +37,50 @@ public class PropertiesFiles extends AbstractFile {
                 final Enumeration<Object> keys = properties.keys();
                 while (keys.hasMoreElements()){
                     final Object key = keys.nextElement();
-                    System.out.println(key + "=" + properties.get(key));
+                    Log.normal(key + "=" + properties.get(key));
                 }
                 reader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            Log.error("No existe un archivo llamado " + fileName + ".properties");
+        }
+    }
+
+    /**
+     * Edita una propiedad dentro del archivo
+     *
+     * @param fileName El archivo donde guardar el contenido
+     * @param key La key a editar
+     * @param value El valor editado
+     */
+    public void editFile(String fileName, String key, String value) {
+        final File file = this.getFile(FileType.PROP, fileName);
+
+        if (file.exists()) {
+            try {
+                final FileReader reader = new FileReader(file);
+                final Properties properties = new Properties();
+                properties.load(reader);
+
+                if (!properties.containsKey(key)) {
+                    Log.error("No existe la key: " + key);
+                    return;
+                }
+
+                properties.replace(key, value);
+
+                final FileWriter writer = new FileWriter(file);
+                properties.store(writer, "Archivo creado mediante app de Iván");
+
+                //
+                reader.close();
+                writer.flush();
+                writer.close();
+                //
+
+                Log.success("Archivo guardado");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -53,7 +93,7 @@ public class PropertiesFiles extends AbstractFile {
      * Escribe el contenido dentro del archivo
      *
      * @param fileName El archivo donde guardar el contenido
-     * @param proper
+     * @param proper Las propiedades que tiene el archivo a ser escrito
      */
     public void saveFile(String fileName, HashMap<String, String> proper) {
         final File file = this.getFile(FileType.PROP, fileName);
@@ -76,7 +116,7 @@ public class PropertiesFiles extends AbstractFile {
                 writer.close();
                 //
 
-                Log.normal("Archivo guardado");
+                Log.success("Archivo guardado");
             } catch (IOException e) {
                 e.printStackTrace();
             }

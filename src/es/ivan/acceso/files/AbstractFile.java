@@ -8,6 +8,8 @@ import java.util.Arrays;
 
 public abstract class AbstractFile {
 
+    public abstract void showFileInfo(String fileName);
+
     /**
      * Borra el archivo
      *
@@ -19,7 +21,7 @@ public abstract class AbstractFile {
 
         if (file.exists()) {
             if (file.delete()) {
-                System.out.println("Archivo borrado");
+                Log.success("Archivo borrado");
             } else {
                 Log.error("No se ha podido borrar el archivo");
             }
@@ -40,7 +42,7 @@ public abstract class AbstractFile {
             System.out.println("No hay archivos guardados");
             return;
         }
-        System.out.println("Archivos:");
+        Log.normal("Archivos:");
         Arrays.asList(parent.listFiles()).forEach(file -> System.out.println(file.getName()));
     }
 

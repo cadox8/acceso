@@ -12,7 +12,8 @@ public class Log {
         NORMAL(""),
         WARNING("[AVISO] "),
         ERROR("[ERROR] "),
-        DEBUG("[DEBUG] ");
+        DEBUG("[DEBUG] "),
+        SUCCESS("[CORRECTO] ");
 
         @Getter private final String prefix;
     }
@@ -21,6 +22,7 @@ public class Log {
     private static final ColoredPrinter error = new ColoredPrinter.Builder(1, true).foreground(Ansi.FColor.RED).build();
     private static final ColoredPrinter warning = new ColoredPrinter.Builder(1, true).foreground(Ansi.FColor.YELLOW).build();
     private static final ColoredPrinter normal = new ColoredPrinter.Builder(1, true).foreground(Ansi.FColor.NONE).build();
+    private static final ColoredPrinter success = new ColoredPrinter.Builder(1, true).foreground(Ansi.FColor.GREEN).build();
     private static final ColoredPrinter div = new ColoredPrinter.Builder(1, true).foreground(Ansi.FColor.CYAN).build();
 
     /**
@@ -28,7 +30,7 @@ public class Log {
      *
      * @param info el mensaje
      */
-    public static void log(String info){
+    public static void debug(String info){
         log(debug, LogType.DEBUG, info);
     }
 
@@ -48,6 +50,15 @@ public class Log {
      */
     public static void warning(String info) {
         log(warning, LogType.WARNING, info);
+    }
+
+    /**
+     * Logs como correcto
+     *
+     * @param info el mensaje
+     */
+    public static void success(String info) {
+        log(success, LogType.SUCCESS, info);
     }
 
     /**

@@ -6,6 +6,7 @@ import es.ivan.acceso.utils.Log;
 import java.io.*;
 
 public class PlainFiles extends AbstractFile {
+
     /**
      * Constructor principal de la clase.
      * Comprueba si existe la carpeta 'files' y, en el caso de que no exista, la crea
@@ -28,7 +29,7 @@ public class PlainFiles extends AbstractFile {
                 System.out.println("\n");
                 final BufferedReader br = new BufferedReader(new FileReader(file));
                 String line;
-                while((line = br.readLine()) != null) System.out.println(line);
+                while((line = br.readLine()) != null) Log.normal(line);
                 br.close();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -54,7 +55,7 @@ public class PlainFiles extends AbstractFile {
                 br.write(content);
                 br.flush();
                 br.close();
-                Log.normal("Archivo guardado");
+                Log.success("Archivo guardado");
             } catch (IOException e) {
                 e.printStackTrace();
             }

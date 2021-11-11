@@ -26,7 +26,8 @@ public class PropertiesMenu {
         Log.normal("2. Escribir en archivo");
         Log.normal("3. Borrar archivo");
         Log.normal("4. Ver archivos guardados");
-        Log.normal("5. Volver");
+        Log.normal("5. Editar archivo guardado");
+        Log.normal("6. Volver");
         Log.div();
 
         try {
@@ -80,6 +81,20 @@ public class PropertiesMenu {
                     this.propertiesFiles.showFileTree(FileType.PROP);
                     break;
                 case 5:
+                    Log.divWithBreak();
+                    Log.normal("Escriba el nombre del archivo:");
+                    final String fileName2 = this.scanner.nextLine();
+                    this.propertiesFiles.showFileInfo(fileName2);
+
+                    Log.normal("\nEscriba la key a ser editada");
+                    final String key = this.scanner.nextLine();
+
+                    Log.normal("\nEscriba el nuevo valor");
+                    this.propertiesFiles.editFile(fileName2, key, this.scanner.nextLine());
+                    Log.div();
+                    this.showMenu();
+                    break;
+                case 6:
                     this.mainMenu.showMenu();
                     return;
                 default:

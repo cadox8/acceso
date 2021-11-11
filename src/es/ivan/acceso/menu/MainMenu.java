@@ -11,12 +11,16 @@ public class MainMenu {
 
     private final FilesMenu filesMenu;
     private final PropertiesMenu propertiesMenu;
+    private final BinMenu binMenu;
+    private final XMLMenu xmlMenu;
 
     public MainMenu() {
         this.scanner = new Scanner(System.in);
 
         this.filesMenu = new FilesMenu(this, this.scanner);
         this.propertiesMenu = new PropertiesMenu(this, this.scanner);
+        this.binMenu = new BinMenu(this, this.scanner);
+        this.xmlMenu = new XMLMenu(this, this.scanner);
     }
 
     /**
@@ -28,7 +32,8 @@ public class MainMenu {
         Log.normal("1. Texto plano");
         Log.normal("2. Archivo de propiedades");
         Log.normal("3. Archivos Binarios");
-        Log.normal("4. Salir");
+        Log.normal("4. Archivos XML");
+        Log.normal("5. Salir");
         Log.div();
 
         try {
@@ -40,9 +45,10 @@ public class MainMenu {
                     this.propertiesMenu.showMenu();
                     return;
                 case 3:
+                case 4:
                     Log.error("Aun no está esto, pana");
                     break;
-                case 4:
+                case 5:
                     Log.warning("Ta luego pana");
                     System.exit(0);
                     break;
@@ -55,12 +61,5 @@ public class MainMenu {
             this.showMenu();
         }
         this.showMenu();
-    }
-
-    /**
-     * Método muy simple para "limpiar" la consola
-     */
-    private void clearConsole() {
-        Log.normal("\n\n\n\n\n\n\n\n\n\n");
     }
 }

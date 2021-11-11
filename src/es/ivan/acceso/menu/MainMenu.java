@@ -45,8 +45,10 @@ public class MainMenu {
                     this.propertiesMenu.showMenu();
                     return;
                 case 3:
+                    this.binMenu.showMenu();
+                    break;
                 case 4:
-                    Log.error("Aun no está esto, pana");
+                    this.xmlMenu.showMenu();
                     break;
                 case 5:
                     Log.warning("Ta luego pana");

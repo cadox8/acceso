@@ -12,7 +12,8 @@ public class PlainFiles extends AbstractFile {
      * Comprueba si existe la carpeta 'files' y, en el caso de que no exista, la crea
      */
     public PlainFiles() {
-        final File parent = this.getFile(FileType.PLAIN, "").getParentFile();
+        super(FileType.PLAIN);
+        final File parent = this.getFile("").getParentFile();
         if (!parent.exists()) parent.mkdirs();
     }
 
@@ -21,8 +22,9 @@ public class PlainFiles extends AbstractFile {
      *
      * @param fileName El archivo a buscar
      */
+    @Override
     public void showFileInfo(String fileName) {
-        final File file = this.getFile(FileType.PLAIN, fileName);
+        final File file = this.getFile(fileName);
 
         if (file.exists()) {
             try {
@@ -46,7 +48,7 @@ public class PlainFiles extends AbstractFile {
      * @param content El contenido a ser guardado
      */
     public void saveFile(String fileName, String content) {
-        final File file = this.getFile(FileType.PLAIN, fileName);
+        final File file = this.getFile(fileName);
 
         if (!file.exists()) {
             try {

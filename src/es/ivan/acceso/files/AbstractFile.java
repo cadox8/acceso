@@ -8,16 +8,21 @@ import java.util.Arrays;
 
 public abstract class AbstractFile {
 
+    private final FileType type;
+
+    public AbstractFile(FileType fileType) {
+        this.type = fileType;
+    }
+
     public abstract void showFileInfo(String fileName);
 
     /**
      * Borra el archivo
      *
-     * @param type El tipo de archivo al que estamos accediendo
      * @param fileName El archivo a ser borrado
      */
-    public void removeFile(FileType type, String fileName) {
-        final File file = this.getFile(type, fileName);
+    public void removeFile(String fileName) {
+        final File file = this.getFile(fileName);
 
         if (file.exists()) {
             if (file.delete()) {
@@ -32,28 +37,25 @@ public abstract class AbstractFile {
 
     /**
      * Muestra el contenido de la carpeta a la que accedemos dependiendo del tipo de búsqueda
-     *
-     * @param type El tipo de archivo al que estamos accediendo
      */
-    public void showFileTree(FileType type) {
-        final File parent = this.getFile(type, "").getParentFile();
+    public void showFileTree() {
+        final File parent = this.getFile("").getParentFile();
 
         if (parent.listFiles().length == 0) {
             System.out.println("No hay archivos guardados");
             return;
         }
         Log.normal("Archivos:");
-        Arrays.asList(parent.listFiles()).forEach(file -> System.out.println(file.getName()));
+        Arrays.asList(parent.listFiles()).forEach(file -> Log.normal(file.getName()));
     }
 
     /**
      * Método interno para obtener el archivo en base a su nombre.
      *
-     * @param type El tipo de archivo al que estamos accediendo
      * @param fileName El nombre del archivo
      * @return El archivo a buscar
      */
-    public File getFile(FileType type, String fileName) {
-        return new File("./files/" + type.getFolder() + "/" + fileName + type.getExt());
+    public File getFile(String fileName) {
+        return new File("./files/" + this.type.getFolder() + "/" + fileName + this.type.getExt());
     }
 }

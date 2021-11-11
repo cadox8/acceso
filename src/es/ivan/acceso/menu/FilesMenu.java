@@ -1,7 +1,6 @@
 package es.ivan.acceso.menu;
 
 import es.ivan.acceso.files.PlainFiles;
-import es.ivan.acceso.files.type.FileType;
 import es.ivan.acceso.utils.Log;
 
 import java.util.NoSuchElementException;
@@ -64,12 +63,12 @@ public class FilesMenu {
                 case 3:
                     Log.divWithBreak();
                     Log.normal("Escriba el nombre del archivo:");
-                    this.plainFiles.removeFile(FileType.PLAIN, this.scanner.nextLine());
+                    this.plainFiles.removeFile(this.scanner.nextLine());
                     Log.div();
                     this.showMenu();
                     break;
                 case 4:
-                    this.plainFiles.showFileTree(FileType.PLAIN);
+                    this.plainFiles.showFileTree();
                     break;
                 case 5:
                     this.mainMenu.showMenu();

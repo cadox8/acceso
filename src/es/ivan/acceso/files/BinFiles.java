@@ -15,15 +15,21 @@ public class BinFiles extends AbstractFile {
      * Comprueba si existe la carpeta 'files' y, en el caso de que no exista, la crea
      */
     public BinFiles() {
-        final File parent = this.getFile(FileType.BIN, "").getParentFile();
+        super(FileType.BIN);
+        final File parent = this.getFile("").getParentFile();
         if (!parent.exists()) parent.mkdirs();
     }
 
+    /**
+     * Muestra el contenido por consola del archivo buscado
+     *
+     * @param fileName El archivo a buscar
+     */
     @Override
     public void showFileInfo(String fileName) {
-        final File file = this.getFile(FileType.BIN, fileName);
+        final File file = this.getFile(fileName);
 
-        if (!file.exists()) {
+        if (file.exists()) {
             try {
                 final ObjectInputStream reader = new ObjectInputStream(new FileInputStream(file));
                 Log.normal(reader.readObject().toString());
@@ -32,7 +38,7 @@ public class BinFiles extends AbstractFile {
                 e.printStackTrace();
             }
         } else {
-            Log.error("Ya existe un archivo llamado " + fileName + ".properties");
+            Log.error("No existe un archivo llamado " + fileName + ".bin");
         }
     }
 }

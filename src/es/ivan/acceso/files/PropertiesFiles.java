@@ -3,7 +3,10 @@ package es.ivan.acceso.files;
 import es.ivan.acceso.files.type.FileType;
 import es.ivan.acceso.utils.Log;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Properties;
@@ -15,7 +18,8 @@ public class PropertiesFiles extends AbstractFile {
      * Comprueba si existe la carpeta 'files' y, en el caso de que no exista, la crea
      */
     public PropertiesFiles() {
-        final File parent = this.getFile(FileType.PROP, "").getParentFile();
+        super(FileType.PROP);
+        final File parent = this.getFile("").getParentFile();
         if (!parent.exists()) parent.mkdirs();
     }
 
@@ -24,8 +28,9 @@ public class PropertiesFiles extends AbstractFile {
      *
      * @param fileName El archivo a buscar
      */
+    @Override
     public void showFileInfo(String fileName) {
-        final File file = this.getFile(FileType.PROP, fileName);
+        final File file = this.getFile(fileName);
 
         if (file.exists()) {
             try {
@@ -56,7 +61,7 @@ public class PropertiesFiles extends AbstractFile {
      * @param value El valor editado
      */
     public void editFile(String fileName, String key, String value) {
-        final File file = this.getFile(FileType.PROP, fileName);
+        final File file = this.getFile(fileName);
 
         if (file.exists()) {
             try {
@@ -96,7 +101,7 @@ public class PropertiesFiles extends AbstractFile {
      * @param proper Las propiedades que tiene el archivo a ser escrito
      */
     public void saveFile(String fileName, HashMap<String, String> proper) {
-        final File file = this.getFile(FileType.PROP, fileName);
+        final File file = this.getFile(fileName);
 
         if (!file.exists()) {
             try {

@@ -5,6 +5,8 @@ import com.diogonunes.jcdp.color.api.Ansi;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+import java.io.IOException;
+
 public class Log {
 
     @RequiredArgsConstructor
@@ -85,10 +87,22 @@ public class Log {
     }
 
     /**
-     * Método muy simple para "limpiar" la consola
+     * Método muy simple para limpiar la consola
+     *
+     * *AVISO*: Este método sólo funciona cuando la consola NO es la de IntelliJ, Eclipse o NetBeans, puesto que sus consolas no son reales.
+     * Esto borra las consolas de Windows y (debería) Linux
      */
     public static void clear() {
-        System.out.println("\n\n\n\n\n\n\n\n\n\n");
+        try {
+            final String os = System.getProperty("os.name");
+            if (os.contains("Windows")) {
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+            } else {
+                new ProcessBuilder("cmd", "clear").inheritIO().start().waitFor();
+            }
+        } catch (IOException | InterruptedException e) {
+            System.out.println("\n\n\n\n\n\n\n\n\n\n");
+        }
     }
 
     /**

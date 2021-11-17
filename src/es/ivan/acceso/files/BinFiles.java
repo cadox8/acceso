@@ -1,12 +1,10 @@
 package es.ivan.acceso.files;
 
+import es.ivan.acceso.api.Alumno;
 import es.ivan.acceso.files.type.FileType;
 import es.ivan.acceso.utils.Log;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
+import java.io.*;
 
 public class BinFiles extends AbstractFile {
 
@@ -32,8 +30,10 @@ public class BinFiles extends AbstractFile {
         if (file.exists()) {
             try {
                 final ObjectInputStream reader = new ObjectInputStream(new FileInputStream(file));
-                Log.normal(reader.readObject().toString());
-
+                System.out.println(reader.readObject());
+                final Alumno alumno = (Alumno) reader.readObject();
+                System.out.println(alumno.toString());
+                reader.close();
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }

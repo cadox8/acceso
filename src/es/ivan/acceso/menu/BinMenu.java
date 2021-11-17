@@ -38,7 +38,7 @@ public class BinMenu {
                 case 1:
                     Log.divWithBreak();
                     Log.normal("Escriba el nombre del archivo:");
-
+                    this.binFiles.showFileInfo(scanner.nextLine());
                     Log.div();
                     this.showMenu();
                     break;

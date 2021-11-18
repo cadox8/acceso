@@ -102,8 +102,9 @@ public class PropertiesMenu {
                     throw new NoSuchElementException();
             }
         } catch (NumberFormatException | NoSuchElementException e) {
-            Log.error("No has pasado un argumento valido");
             Log.clear();
+            Log.error("No has pasado un argumento valido");
+            Log.stack(e.getStackTrace());
             this.showMenu();
         }
         this.showMenu();

@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum FileType {
+
     PLAIN("plain", ".txt"),
     PROP("properties", ".properties"),
     BIN("bin", ".bin"),

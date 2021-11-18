@@ -9,7 +9,7 @@ import java.io.Serializable;
 @Data
 public class Alumno implements Serializable {
 
-    private static final long serialVersionUID = 8799656487674716638L;
+    private static final long serialVersionUID = 8687999564436676302L;
 
     private String curso;
     private String asignatura;

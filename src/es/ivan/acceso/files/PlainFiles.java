@@ -34,7 +34,8 @@ public class PlainFiles extends AbstractFile {
                 while((line = br.readLine()) != null) Log.normal(line);
                 br.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.error("Ha ocurrido un error inesperado");
+                Log.stack(e.getStackTrace());
             }
         } else {
             Log.error("No existe un archivo llamado " + fileName + ".txt");
@@ -59,7 +60,8 @@ public class PlainFiles extends AbstractFile {
                 br.close();
                 Log.success("Archivo guardado");
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.error("Ha ocurrido un error inesperado");
+                Log.stack(e.getStackTrace());
             }
         } else {
             Log.error("Ya existe un archivo llamado " + fileName + ".txt");

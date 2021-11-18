@@ -5,7 +5,16 @@ import com.diogonunes.jcdp.color.api.Ansi;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.io.IOException;
+import java.io.*;
+import java.net.URI;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class Log {
 
@@ -15,7 +24,8 @@ public class Log {
         WARNING("[AVISO] "),
         ERROR("[ERROR] "),
         DEBUG("[DEBUG] "),
-        SUCCESS("[CORRECTO] ");
+        SUCCESS("[CORRECTO] "),
+        STACK("[STACK] ");
 
         @Getter private final String prefix;
     }
@@ -27,6 +37,9 @@ public class Log {
     private static final ColoredPrinter success = new ColoredPrinter.Builder(1, true).foreground(Ansi.FColor.GREEN).build();
     private static final ColoredPrinter div = new ColoredPrinter.Builder(1, true).foreground(Ansi.FColor.CYAN).build();
 
+    // Log file
+    private static final File logFile = new File("./logs/log_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd_MM_uuuu_HH_mm_ss", Locale.ENGLISH)) + ".log");
+
     /**
      * Logs como debug
      *
@@ -34,6 +47,7 @@ public class Log {
      */
     public static void debug(String info){
         log(debug, LogType.DEBUG, info);
+        Log.toFile(LogType.DEBUG.getPrefix() + info);
     }
 
     /**
@@ -43,6 +57,17 @@ public class Log {
      */
     public static void error(String info) {
         log(error, LogType.ERROR, info);
+        Log.toFile(LogType.ERROR.getPrefix() + info);
+    }
+
+    /**
+     * Logs como stack al archivo
+     * NO lo muestra por consola
+     *
+     * @param stack el mensaje
+     */
+    public static void stack(StackTraceElement[] stack) {
+        Log.toFile(LogType.STACK.getPrefix() + Arrays.stream(stack).map(StackTraceElement::toString).collect(Collectors.joining("\n")));
     }
 
     /**
@@ -52,6 +77,7 @@ public class Log {
      */
     public static void warning(String info) {
         log(warning, LogType.WARNING, info);
+        Log.toFile(LogType.WARNING.getPrefix() + info);
     }
 
     /**
@@ -115,5 +141,26 @@ public class Log {
     private static void log(ColoredPrinter printer, LogType type, String info){
         printer.setTimestamping(false);
         printer.println(type.getPrefix() + info);
+    }
+
+    private static void toFile(String info) {
+        final String time = "[" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss", Locale.ENGLISH)) + "]";
+
+        try {
+            Files.write(logFile.toPath(), List.of(time + info), StandardCharsets.UTF_8, StandardOpenOption.APPEND);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void createLogFile() {
+        if (!logFile.getParentFile().exists()) logFile.getParentFile().mkdirs();
+        if (!logFile.exists()) {
+            try {
+                logFile.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

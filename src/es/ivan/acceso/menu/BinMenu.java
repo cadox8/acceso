@@ -3,6 +3,8 @@ package es.ivan.acceso.menu;
 import es.ivan.acceso.files.BinFiles;
 import es.ivan.acceso.utils.Log;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -69,8 +71,9 @@ public class BinMenu {
                     throw new NoSuchElementException();
             }
         } catch (NumberFormatException | NoSuchElementException e) {
-            Log.error("No has pasado un argumento valido");
             Log.clear();
+            Log.error("No has pasado un argumento valido");
+            Log.stack(e.getStackTrace());
             this.showMenu();
         }
         this.showMenu();

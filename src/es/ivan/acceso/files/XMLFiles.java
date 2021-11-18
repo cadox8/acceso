@@ -53,6 +53,7 @@ public class XMLFiles extends AbstractFile {
 
             } catch (ParserConfigurationException | SAXException | IOException e) {
                 Log.error("El archivo no existe o no está bien formado");
+                Log.stack(e.getStackTrace());
             }
         } else {
             Log.error("No existe un archivo llamado " + fileName + ".xml");

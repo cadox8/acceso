@@ -3,8 +3,10 @@ package es.ivan.acceso.menu;
 import es.ivan.acceso.files.XMLFiles;
 import es.ivan.acceso.utils.Log;
 
+import java.util.Arrays;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class XMLMenu {
 
@@ -48,7 +50,6 @@ public class XMLMenu {
                     final String fileName = this.scanner.nextLine();
                     Log.normal("Escribe el contenido (Dar doble enter para finalizar):");
 
-
                     Log.div();
                     this.showMenu();
                     break;
@@ -69,8 +70,9 @@ public class XMLMenu {
                     throw new NoSuchElementException();
             }
         } catch (NumberFormatException | NoSuchElementException e) {
-            Log.error("No has pasado un argumento valido");
             Log.clear();
+            Log.error("No has pasado un argumento valido");
+            Log.stack(e.getStackTrace());
             this.showMenu();
         }
         this.showMenu();

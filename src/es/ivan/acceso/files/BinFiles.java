@@ -35,7 +35,8 @@ public class BinFiles extends AbstractFile {
                 System.out.println(alumno.toString());
                 reader.close();
             } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
+                Log.error("Ha ocurrido un error inesperado");
+               Log.stack(e.getStackTrace());
             }
         } else {
             Log.error("No existe un archivo llamado " + fileName + ".bin");

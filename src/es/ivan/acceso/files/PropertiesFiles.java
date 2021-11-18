@@ -46,7 +46,8 @@ public class PropertiesFiles extends AbstractFile {
                 }
                 reader.close();
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.error("Ha ocurrido un error inesperado");
+                Log.stack(e.getStackTrace());
             }
         } else {
             Log.error("No existe un archivo llamado " + fileName + ".properties");
@@ -87,7 +88,8 @@ public class PropertiesFiles extends AbstractFile {
 
                 Log.success("Archivo guardado");
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.error("Ha ocurrido un error inesperado");
+                Log.stack(e.getStackTrace());
             }
         } else {
             Log.error("No existe un archivo llamado " + fileName + ".properties");
@@ -123,7 +125,8 @@ public class PropertiesFiles extends AbstractFile {
 
                 Log.success("Archivo guardado");
             } catch (IOException e) {
-                e.printStackTrace();
+                Log.error("Ha ocurrido un error inesperado");
+               Log.stack(e.getStackTrace());
             }
         } else {
             Log.error("Ya existe un archivo llamado " + fileName + ".properties");

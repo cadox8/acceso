@@ -14,6 +14,6 @@ public class Alumno implements Serializable {
     private String curso;
     private String asignatura;
     private String nombre;
-    private boolean aprobado;
-    private float nota;
+    private Boolean aprobado;
+    private Float nota;
 }

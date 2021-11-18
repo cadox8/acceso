@@ -20,7 +20,7 @@ Project Properties -> Build -> Compiling
 Ejecutar lo siguiente (desde la carpeta `acceso`) para ver el programa en funcionamiento:
 ```bash
 cd build
-java -jar ./Acceso-<version>.jar
+java -jar ./Acceso.jar
 ```
 
 ## Info extra

@@ -2,6 +2,7 @@ package es.ivan.acceso.utils;
 
 import com.diogonunes.jcdp.color.ColoredPrinter;
 import com.diogonunes.jcdp.color.api.Ansi;
+import es.ivan.acceso.api.Alumno;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

@@ -1,10 +1,12 @@
 package es.ivan.acceso.files;
 
+import es.ivan.acceso.api.BinParser;
 import es.ivan.acceso.api.Alumno;
 import es.ivan.acceso.files.type.FileType;
 import es.ivan.acceso.utils.Log;
 
 import java.io.*;
+import java.util.HashMap;
 
 public class BinFiles extends AbstractFile {
 
@@ -29,14 +31,26 @@ public class BinFiles extends AbstractFile {
 
         if (file.exists()) {
             try {
-                final ObjectInputStream reader = new ObjectInputStream(new FileInputStream(file));
-                System.out.println(reader.readObject());
-                final Alumno alumno = (Alumno) reader.readObject();
-                System.out.println(alumno.toString());
+                final ObjectInputStream reader = new BinParser(new FileInputStream(file), "dam.AD", "es.ivan.acceso.api");
+                final HashMap<String, Alumno> alumnos = (HashMap<String, Alumno>) reader.readObject();
+
+                alumnos.forEach((name, alum) -> {
+                    Log.normal(name + ":");
+                    final StringBuilder sb = new StringBuilder();
+                    sb.append("  Nombre: " + alum.getNombre());
+                    sb.append("\n  Asignatura: " + alum.getAsignatura());
+                    sb.append("\n  Curso: " + alum.getCurso());
+                    sb.append("\n  Aprobado: " + (alum.getAprobado() ? "Sí" : "No"));
+                    sb.append("\n  Nota: " + alum.getNota());
+                    sb.append('\n');
+                    Log.normal(sb.toString());
+                });
+
                 reader.close();
             } catch (IOException | ClassNotFoundException e) {
                 Log.error("Ha ocurrido un error inesperado");
-               Log.stack(e.getStackTrace());
+                e.printStackTrace();
+                Log.stack(e.getStackTrace());
             }
         } else {
             Log.error("No existe un archivo llamado " + fileName + ".bin");

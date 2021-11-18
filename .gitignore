@@ -4,6 +4,8 @@
 
 .idea
 *.iml
+
 pom.xml
 build/files
-build/logs
+
+.log

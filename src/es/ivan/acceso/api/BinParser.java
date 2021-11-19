@@ -9,7 +9,7 @@ import java.io.ObjectStreamClass;
 import java.lang.reflect.Field;
 
 /**
- * Código sacado de StackOverflow ()
+ * Código sacado de StackOverflow (https://stackoverflow.com/a/55183038/6230199)
  */
 public class BinParser extends ObjectInputStream {
 

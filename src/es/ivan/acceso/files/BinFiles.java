@@ -1,13 +1,12 @@
 package es.ivan.acceso.files;
 
-import es.ivan.acceso.api.BinParser;
 import es.ivan.acceso.api.Alumno;
+import es.ivan.acceso.api.BinParser;
 import es.ivan.acceso.files.type.FileType;
 import es.ivan.acceso.utils.Log;
 
 import java.io.*;
 import java.util.HashMap;
-import java.util.Properties;
 
 public class BinFiles extends AbstractFile {
 
@@ -50,7 +49,6 @@ public class BinFiles extends AbstractFile {
                 reader.close();
             } catch (IOException | ClassNotFoundException e) {
                 Log.error("Ha ocurrido un error inesperado");
-                e.printStackTrace();
                 Log.stack(e.getStackTrace());
             }
         } else {
@@ -76,7 +74,6 @@ public class BinFiles extends AbstractFile {
                 reader.close();
             } catch (IOException | ClassNotFoundException e) {
                 Log.error("Ha ocurrido un error inesperado");
-                e.printStackTrace();
                 Log.stack(e.getStackTrace());
             }
         } else {
@@ -121,7 +118,6 @@ public class BinFiles extends AbstractFile {
                 return true;
             } catch (IOException | ClassNotFoundException e) {
                 Log.error("Ha ocurrido un error inesperado");
-                e.printStackTrace();
                 Log.stack(e.getStackTrace());
             }
         } else {
@@ -190,7 +186,7 @@ public class BinFiles extends AbstractFile {
 
                     default:
                         Log.error("No has pasado un valor válido");
-                        break;
+                        return;
                 }
 
                 if (selection == 6) {

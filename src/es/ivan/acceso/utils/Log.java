@@ -148,7 +148,7 @@ public class Log {
         final String time = "[" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("HH:mm:ss", Locale.ENGLISH)) + "]";
 
         try {
-            Files.write(logFile.toPath(), List.of(time + info), StandardCharsets.UTF_8, StandardOpenOption.APPEND);
+            Files.write(logFile.toPath(), Collections.singletonList(time + info), StandardCharsets.UTF_8, StandardOpenOption.APPEND);
         } catch (IOException e) {
             e.printStackTrace();
         }

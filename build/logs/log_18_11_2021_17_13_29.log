@@ -1,7 +1,0 @@
-[17:13:32][ERROR] No has pasado un argumento valido
-[17:13:32][STACK] java.base/java.lang.NumberFormatException.forInputString(NumberFormatException.java:68)
-java.base/java.lang.Integer.parseInt(Integer.java:652)
-java.base/java.lang.Integer.parseInt(Integer.java:770)
-es.ivan.acceso.menu.BinMenu.showMenu(BinMenu.java:39)
-es.ivan.acceso.menu.MainMenu.showMenu(MainMenu.java:50)
-es.ivan.acceso.Acceso.main(Acceso.java:15)

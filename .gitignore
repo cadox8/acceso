@@ -6,6 +6,6 @@
 *.iml
 
 pom.xml
-build/files
+build/logs
 
-.log
+*.log

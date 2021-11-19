@@ -3,6 +3,7 @@ package es.ivan.acceso.menu;
 import es.ivan.acceso.utils.Log;
 
 import java.util.Arrays;
+import java.util.Locale;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.stream.Collectors;
@@ -17,7 +18,8 @@ public class MainMenu {
     private final XMLMenu xmlMenu;
 
     public MainMenu() {
-        this.scanner = new Scanner(System.in);
+        this.scanner = new Scanner(System.in, "UTF-8");
+        this.scanner.useLocale(new Locale("es", "ES"));
 
         this.filesMenu = new FilesMenu(this, this.scanner);
         this.propertiesMenu = new PropertiesMenu(this, this.scanner);

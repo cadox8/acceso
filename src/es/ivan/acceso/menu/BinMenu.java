@@ -29,7 +29,7 @@ public class BinMenu {
     public void showMenu() {
         Log.div();
         Log.normal("1. Ver contenido de archivo");
-        Log.normal("2. Escribir en archivo");
+        Log.normal("2. Editar alumno");
         Log.normal("3. Borrar archivo");
         Log.normal("4. Ver archivos guardados");
         Log.normal("5. Volver");
@@ -48,9 +48,20 @@ public class BinMenu {
                     Log.divWithBreak();
                     Log.normal("Escriba el nombre del archivo:");
                     final String fileName = this.scanner.nextLine();
-                    Log.normal("Escribe el contenido (Dar doble enter para finalizar):");
 
+                    this.binFiles.showAlumnos(fileName);
 
+                    Log.normal("Escriba el nombre del alumno a editar:");
+                    final String alumno = this.scanner.nextLine();
+
+                    Log.divWithBreak();
+                    if (!this.binFiles.showAlumno(fileName, alumno)) break;
+
+                    Log.normal("Seleccione el valor a editar");
+                    final int selection = Integer.parseInt(this.scanner.nextLine());
+
+                    Log.normal("Introduzca el nuevo valor [en el caso de aprobado = s/n | en el caso de borrar, doble enter]");
+                    this.binFiles.editFile(fileName, alumno, selection, this.scanner.nextLine());
                     Log.div();
                     this.showMenu();
                     break;

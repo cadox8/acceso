@@ -30,9 +30,10 @@ public class BinMenu {
         Log.div();
         Log.normal("1. Ver contenido de archivo");
         Log.normal("2. Editar alumno");
-        Log.normal("3. Borrar archivo");
-        Log.normal("4. Ver archivos guardados");
-        Log.normal("5. Volver");
+        Log.normal("3. Añadir alumno");
+        Log.normal("4. Borrar archivo");
+        Log.normal("5. Ver archivos guardados");
+        Log.normal("6. Volver");
         Log.div();
 
         try {
@@ -68,14 +69,38 @@ public class BinMenu {
                 case 3:
                     Log.divWithBreak();
                     Log.normal("Escriba el nombre del archivo:");
-                    this.binFiles.removeFile(this.scanner.nextLine());
+                    final String fileName2 = this.scanner.nextLine();
+
+                    Log.normal("Escriba el nombre del alumno a editar:");
+                    final String alumno2 = this.scanner.nextLine();
+
+                    Log.normal("Escriba la asignatura");
+                    final String asignatura = this.scanner.nextLine();
+
+                    Log.normal("Escriba el curso");
+                    final String curso = this.scanner.nextLine();
+
+                    Log.normal("Escriba la nota");
+                    final String nota = this.scanner.nextLine();
+
+                    Log.normal("Diga si está aprobado [s] o suspenso [n]");
+                    final boolean aprobado = this.scanner.nextLine().equalsIgnoreCase("s");
+
+                    this.binFiles.addAlumno(fileName2, alumno2, asignatura, curso, aprobado, nota);
                     Log.div();
                     this.showMenu();
                     break;
                 case 4:
-                    this.binFiles.showFileTree();
+                    Log.divWithBreak();
+                    Log.normal("Escriba el nombre del archivo:");
+                    this.binFiles.removeFile(this.scanner.nextLine());
+                    Log.div();
+                    this.showMenu();
                     break;
                 case 5:
+                    this.binFiles.showFileTree();
+                    break;
+                case 6:
                     this.mainMenu.showMenu();
                     return;
                 default:

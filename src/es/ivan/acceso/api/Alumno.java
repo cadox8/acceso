@@ -11,9 +11,9 @@ public class Alumno implements Serializable {
 
     private static final long serialVersionUID = 8687999564436676302L;
 
-    private String curso;
-    private String asignatura;
     private String nombre;
+    private String asignatura;
+    private String curso;
     private Boolean aprobado;
     private Float nota;
 }

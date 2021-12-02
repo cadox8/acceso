@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 @AllArgsConstructor
 @Data
-public class Alumno implements Serializable {
+public class Alumno implements Serializable, Comparable<Alumno> {
 
     private static final long serialVersionUID = 8687999564436676302L;
 
@@ -16,4 +16,9 @@ public class Alumno implements Serializable {
     private String curso;
     private Boolean aprobado;
     private Float nota;
+
+    @Override
+    public int compareTo(Alumno o) {
+        return this.nombre.toLowerCase().compareTo(o.getNombre().toLowerCase());
+    }
 }

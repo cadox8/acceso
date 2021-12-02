@@ -22,11 +22,11 @@ public class Log {
     @RequiredArgsConstructor
     public enum LogType {
         NORMAL(""),
-        WARNING("[AVISO] "),
-        ERROR("[ERROR] "),
-        DEBUG("[DEBUG] "),
-        SUCCESS("[CORRECTO] "),
-        STACK("[STACK] ");
+        WARNING("[!] "),
+        ERROR("[X] "),
+        DEBUG("[D] "),
+        SUCCESS("[✔] "),
+        STACK("[S] ");
 
         @Getter private final String prefix;
     }

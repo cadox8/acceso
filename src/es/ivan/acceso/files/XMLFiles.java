@@ -2,10 +2,8 @@ package es.ivan.acceso.files;
 
 import es.ivan.acceso.files.type.FileType;
 import es.ivan.acceso.utils.Log;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
+import lombok.NonNull;
+import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -40,16 +38,8 @@ public class XMLFiles extends AbstractFile {
                 final Element documentElement = document.getDocumentElement();
                 documentElement.normalize();
 
-                Log.normal(documentElement.getNodeName());
-
-                final NodeList children = documentElement.getChildNodes();
-                for (int i = 0; i < children.getLength(); i++) {
-                    final Node node = children.item(i);
-
-                    if (node.getNodeName().startsWith("#")) continue;
-
-                    Log.normal("  " + node.getNodeName() + " " + node.getTextContent());
-                }
+                Log.normal("\n" + documentElement.getNodeName());
+                this.showChildren(documentElement, 2);
 
             } catch (ParserConfigurationException | SAXException | IOException e) {
                 Log.error("El archivo no existe o no está bien formado");
@@ -58,5 +48,56 @@ public class XMLFiles extends AbstractFile {
         } else {
             Log.error("No existe un archivo llamado " + fileName + ".xml");
         }
+    }
+
+    private void showChildren(@NonNull Node parent, int tabs) {
+        if (!parent.hasChildNodes()) return;
+        final NodeList children = parent.getChildNodes();
+        final StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < children.getLength(); i++) {
+            final Node child = children.item(i);
+
+            if (child.getNodeName().startsWith("#")) continue;
+
+            sb.append(this.generateSpacer(tabs)).append(child.getNodeName());
+
+            // Leemos los atributos
+            if (child.hasAttributes()) {
+                final NamedNodeMap attributes = child.getAttributes();
+                sb.append("(");
+
+                for (int j = 0; j < attributes.getLength(); j++) {
+                    final Node node = attributes.item(j);
+
+                    if (node.getNodeName().startsWith("#")) continue;
+
+                    sb.append(node.getNodeName()).append("=").append(node.getNodeValue());
+
+                    if (j + 1 != attributes.getLength()) sb.append(", ");
+                }
+                sb.append(")");
+            }
+
+            // Leemos el contenido
+            final Node content = child.getChildNodes().item(0);
+            if (content.getNodeType() != Node.ELEMENT_NODE) sb.append(": ").append(content.getTextContent());
+
+            Log.normal(this.generateSpacer(tabs) + sb);
+            sb.delete(0, sb.length());
+
+            // Si tiene hijos los mostramos
+            if (child.hasChildNodes()) this.showChildren(child, tabs + 2);
+        }
+    }
+
+    private String generateSpacer(int tabs) {
+        final StringBuilder sb = new StringBuilder();
+
+        while (tabs > 0) {
+            sb.append(" ");
+            tabs--;
+        }
+        return sb.toString();
     }
 }

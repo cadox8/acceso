@@ -1,11 +1,9 @@
 package es.ivan.acceso.menu;
 
 import es.ivan.acceso.utils.Log;
+import es.ivan.acceso.utils.RandomNumbers;
 
-import java.util.Arrays;
-import java.util.Locale;
-import java.util.NoSuchElementException;
-import java.util.Scanner;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class MainMenu {
@@ -37,7 +35,8 @@ public class MainMenu {
         Log.normal("2. Archivo de propiedades");
         Log.normal("3. Archivos Binarios");
         Log.normal("4. Archivos XML");
-        Log.normal("5. Salir");
+        Log.normal("5. Números aleatorios");
+        Log.normal("6. Salir");
         Log.div();
 
         try {
@@ -55,6 +54,9 @@ public class MainMenu {
                     this.xmlMenu.showMenu();
                     break;
                 case 5:
+                    Log.normal("Números [10]: " + new RandomNumbers().generateRandomNumbers(10, 100));
+                    break;
+                case 6:
                     Log.warning("Ta luego pana");
                     System.exit(0);
                     break;

@@ -29,7 +29,7 @@ public class BinMenu {
     public void showMenu() {
         Log.div();
         Log.normal("1. Ver contenido de archivo");
-        Log.normal("2. Editar alumno");
+        Log.normal("2. Editar/Borrar alumno");
         Log.normal("3. Añadir alumno");
         Log.normal("4. Borrar archivo");
         Log.normal("5. Ver archivos guardados");

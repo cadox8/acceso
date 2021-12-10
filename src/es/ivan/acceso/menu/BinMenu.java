@@ -61,8 +61,14 @@ public class BinMenu {
                     Log.normal("Seleccione el valor a editar");
                     final int selection = Integer.parseInt(this.scanner.nextLine());
 
-                    Log.normal("Introduzca el nuevo valor [en el caso de aprobado = s/n | en el caso de borrar, doble enter]");
-                    this.binFiles.editFile(fileName, alumno, selection, this.scanner.nextLine());
+                    String editValue = "";
+
+                    if (selection != 6) {
+                        Log.normal("Introduzca el nuevo valor [en el caso de aprobado = s/n | en el caso de borrar, doble enter]");
+                        editValue = this.scanner.nextLine();
+                    }
+
+                    this.binFiles.editFile(fileName, alumno, selection, editValue);
                     Log.div();
                     this.showMenu();
                     break;

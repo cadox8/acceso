@@ -208,7 +208,12 @@ public class BinFiles extends AbstractFile {
                 }
 
                 final ObjectOutputStream writer = new ObjectOutputStream(new FileOutputStream(this.getFile(fileName)));
-                writer.writeObject(alumnos);
+
+                final HashMap<String, Alumno> alumnosMap = new HashMap<>();
+
+                alumnos.forEach(a -> alumnosMap.put(a.getNombre(), a));
+
+                writer.writeObject(alumnosMap);
                 writer.flush();
                 writer.close();
                 Log.success("Archivo guardado");

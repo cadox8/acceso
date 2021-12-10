@@ -3,8 +3,6 @@ package es.ivan.acceso.menu;
 import es.ivan.acceso.files.BinFiles;
 import es.ivan.acceso.utils.Log;
 
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -29,7 +27,7 @@ public class BinMenu {
     public void showMenu() {
         Log.div();
         Log.normal("1. Ver contenido de archivo");
-        Log.normal("2. Editar alumno");
+        Log.normal("2. Editar/Borrar alumno");
         Log.normal("3. Añadir alumno");
         Log.normal("4. Ordenar por ...");
         Log.normal("5. Borrar archivo");
@@ -62,8 +60,14 @@ public class BinMenu {
                     Log.normal("Seleccione el valor a editar");
                     final int selection = Integer.parseInt(this.scanner.nextLine());
 
-                    Log.normal("Introduzca el nuevo valor [en el caso de aprobado = s/n | en el caso de borrar, doble enter]");
-                    this.binFiles.editFile(fileName, alumno, selection, this.scanner.nextLine());
+                    String editValue = "";
+
+                    if (selection != 6) {
+                        Log.normal("Introduzca el nuevo valor [en el caso de aprobado = s/n | en el caso de borrar, doble enter]");
+                        editValue = this.scanner.nextLine();
+                    }
+
+                    this.binFiles.editFile(fileName, alumno, selection, editValue);
                     Log.div();
                     this.showMenu();
                     break;

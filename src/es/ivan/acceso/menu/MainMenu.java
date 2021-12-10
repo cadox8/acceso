@@ -3,8 +3,10 @@ package es.ivan.acceso.menu;
 import es.ivan.acceso.utils.Log;
 import es.ivan.acceso.utils.RandomNumbers;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Locale;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
+import java.util.TreeSet;
 
 public class MainMenu {
 
@@ -54,7 +56,8 @@ public class MainMenu {
                     this.xmlMenu.showMenu();
                     break;
                 case 5:
-                    Log.normal("Números [10]: " + new RandomNumbers().generateRandomNumbers(10, 100));
+                    final TreeSet<Integer> numbers = new RandomNumbers().generateRandomNumbers();
+                    Log.normal("Números [" + numbers.size() + "]: " + numbers);
                     break;
                 case 6:
                     Log.warning("Ta luego pana");

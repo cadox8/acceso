@@ -34,7 +34,11 @@ public class XMLFiles extends AbstractFile {
 
         if (file.exists()) {
             try {
-                final Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(file);
+                final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+
+                factory.setIgnoringComments(true);
+
+                final Document document = factory.newDocumentBuilder().parse(file);
                 final Element documentElement = document.getDocumentElement();
                 documentElement.normalize();
 
@@ -49,6 +53,7 @@ public class XMLFiles extends AbstractFile {
             Log.error("No existe un archivo llamado " + fileName + ".xml");
         }
     }
+
 
     private void showChildren(@NonNull Node parent, int tabs) {
         if (!parent.hasChildNodes()) return;

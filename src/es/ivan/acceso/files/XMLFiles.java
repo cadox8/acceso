@@ -3,6 +3,7 @@ package es.ivan.acceso.files;
 import es.ivan.acceso.api.XMLGenerator;
 import es.ivan.acceso.files.type.FileType;
 import es.ivan.acceso.utils.Log;
+import es.ivan.acceso.utils.Normalize;
 import lombok.NonNull;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
@@ -41,6 +42,7 @@ public class XMLFiles extends AbstractFile {
             try {
                 final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
+                // No queremos comentarios en la consola :c
                 factory.setIgnoringComments(true);
 
                 final Document document = factory.newDocumentBuilder().parse(file);
@@ -59,22 +61,31 @@ public class XMLFiles extends AbstractFile {
         }
     }
 
+    /**
+     * Método para crear nuevos documentos XML
+     *
+     * @param fileName El nombre del archivo
+     * @param parentNode El nodo padre
+     * @param scanner El Scanner del menú
+     */
     public void writeNewXML(String fileName, String parentNode, Scanner scanner) {
         final File file = this.getFile(fileName);
 
         if (!file.exists()) {
             try {
+                // Creamos una instancia de mi clase XMLGenerator
                 XMLGenerator xmlGenerator = new XMLGenerator(parentNode);
 
                 Log.normal("Escribe el nodo hijo");
                 xmlGenerator = this.ask4Child(scanner, xmlGenerator, 0, scanner.nextLine());
 
+                // Con esto lo guardamos :D
                 final Transformer tr = TransformerFactory.newInstance().newTransformer();
                 tr.setOutputProperty(OutputKeys.INDENT, "yes");
                 tr.setOutputProperty(OutputKeys.METHOD, "xml");
                 tr.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
 
-                tr.transform(new DOMSource(xmlGenerator.build()), new StreamResult(fileName));
+                tr.transform(new DOMSource(xmlGenerator.build()), new StreamResult(file.getAbsolutePath()));
 
                 Log.success("Archivo guardado!");
             } catch (ParserConfigurationException | TransformerException e) {
@@ -86,26 +97,52 @@ public class XMLFiles extends AbstractFile {
         }
     }
 
+    /**
+     * Método para preguntar si queremos añadir hijos/hermanos y crearlos! Tambien sirve para comentarios
+     *
+     * @param scanner El scanner del menu
+     * @param xmlGenerator Una instancia de mi XMLGenerator
+     * @param type El tipo de nodo que estoy creado. 0 -> Hijo | 1 -> Hermano
+     * @param line La línea introducida por consola
+     * @return Una instancia de mi XMLGenerator
+     *
+     * @see XMLGenerator
+     */
     private XMLGenerator ask4Child(Scanner scanner, XMLGenerator xmlGenerator, int type, String line) {
+        line = Normalize.normalizeWord(line);
+
         // Formato: key(atrib): value || key(atrib)
         final String parsedXML = line.replaceAll("\\s", ""); // Borramos todos los espacios
 
-        final String[] realElement = parsedXML.split(":");
-        realElement[0] = realElement[0].split("\\(")[0];
-
-        final HashMap<String, String> attributes = this.parseAttributes(parsedXML.split("\\((.*?)\\)")[0].replace("(", "").replace(")", "").split("="));
-
-        if (type == 0) {
-            if (realElement.length > 1 && realElement[1] != null) {
-                xmlGenerator.addChildrenValue(realElement[0], realElement[1], attributes);
-            } else {
-                xmlGenerator.addChildren(realElement[0], attributes);
-            }
+        if (parsedXML.startsWith("#")) {
+            // Si es un comentario el flujo del programa va por aquí
+            xmlGenerator.addComment(line);
         } else {
-            if (realElement.length > 1 && realElement[1] != null) {
-                xmlGenerator.addSiblingValue(realElement[0], realElement[1], attributes);
+            // Comprobamos si el nodo tiene contenido (Valor)
+            final String[] realElement = parsedXML.split(":");
+            realElement[0] = realElement[0].split("\\(")[0];
+
+            // Obtenemos los atributos (si hay)
+            // Para ello comprobamos si existe un "(". Si existe hacemos una substring desde ese caracter + 1 hasta el caracter final ")".
+            final HashMap<String, String> attributes = line.contains("(") ?
+                    this.parseAttributes(line.substring(line.indexOf("(") + 1, line.indexOf(")")).split(" ")) : new HashMap<>();
+
+            if (type == 0) {
+                // Comprobamos si existe información detras de los :
+                if (realElement.length > 1 && realElement[1] != null) {
+                    // Creamos el hijo con contenido
+                    xmlGenerator.addChildrenValue(realElement[0], realElement[1], attributes);
+                } else {
+                    // Creamos el hijo sin contenido
+                    xmlGenerator.addChildren(realElement[0], attributes);
+                }
             } else {
-                xmlGenerator.addSibling(realElement[0], attributes);
+                // Si el tipo es hermano entra por aquí
+                if (realElement.length > 1 && realElement[1] != null) {
+                    xmlGenerator.addSiblingValue(realElement[0], realElement[1], attributes);
+                } else {
+                    xmlGenerator.addSibling(realElement[0], attributes);
+                }
             }
         }
 
@@ -125,12 +162,19 @@ public class XMLFiles extends AbstractFile {
         return xmlGenerator;
     }
 
+    /**
+     * Método para parsear los atributos
+     *
+     * *Importante*: Los atributos debem seguir el esquema (atributo=valor atributo2=valor2)
+     *
+     * @param attributesString Los atributos que residen entre los ()
+     * @return Key - Value de los atributos
+     */
     private HashMap<String, String> parseAttributes(String[] attributesString) {
         final HashMap<String, String> attributes = new HashMap<>();
-        for (int i = 0; i < attributesString.length - 1; i += 2) {
-            if (attributesString[i] == null) attributesString[i] = "";
-            if (attributesString[i + 1] == null) attributesString[i + 1] = null;
-            attributes.put(attributesString[i], attributesString[i + 1]);
+        for (String s : attributesString) {
+            final String[] values = s.split("=");
+            attributes.put(values[0], values[1]);
         }
         return attributes;
     }
@@ -142,6 +186,7 @@ public class XMLFiles extends AbstractFile {
      * @param tabs Las tabulaciones a pasar para imprimir
      */
     private void showChildren(@NonNull Node parent, int tabs) {
+        // Si no tien hijos adios
         if (!parent.hasChildNodes()) return;
         final NodeList children = parent.getChildNodes();
         final StringBuilder sb = new StringBuilder();
@@ -149,8 +194,10 @@ public class XMLFiles extends AbstractFile {
         for (int i = 0; i < children.getLength(); i++) {
             final Node child = children.item(i);
 
+            // Si el nodo empieza con # no lo mostramos
             if (child.getNodeName().startsWith("#")) continue;
 
+            // Genero los espacios y añado el nombre del nodo
             sb.append(this.generateSpacer(tabs)).append(child.getNodeName());
 
             // Leemos los atributos
@@ -172,6 +219,7 @@ public class XMLFiles extends AbstractFile {
 
             // Leemos el contenido
             final Node content = child.getChildNodes().item(0);
+            // Comprobamos que el contenido no sea nulo, que no sea un nodo y que no este vacio. Si se cumple todo, se añade
             if (content != null && content.getNodeType() != Node.ELEMENT_NODE && !content.getTextContent().trim().isEmpty()) sb.append(": ").append(content.getTextContent());
 
             Log.normal(this.generateSpacer(tabs) + sb);

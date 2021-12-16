@@ -1,8 +1,10 @@
 package es.ivan.acceso.menu;
 
+import es.ivan.acceso.api.Alumno;
 import es.ivan.acceso.files.PlainFiles;
 import es.ivan.acceso.files.RandomFiles;
 import es.ivan.acceso.utils.Log;
+import es.ivan.acceso.utils.Normalize;
 
 import java.util.NoSuchElementException;
 import java.util.Scanner;
@@ -47,17 +49,37 @@ public class RandomMenu {
                     Log.divWithBreak();
                     Log.normal("Escriba el nombre del archivo:");
                     final String fileName = this.scanner.nextLine();
-                    Log.normal("Escribe el contenido (Dar doble enter para finalizar):");
 
-                    //Lee la consola hasta que se inserte una linea en blanco
-                    final StringBuilder sb = new StringBuilder();
-                    while (this.scanner.hasNextLine()) {
-                        final String line = this.scanner.nextLine();
-                        if (line.isEmpty()) break;
-                        sb.append(line);
+                    Log.normal("Escriba el nombre del alumno a añadir:");
+                    final String alumno = Normalize.normalizeWord(this.scanner.nextLine());
+
+                    Log.normal("Escriba la asignatura");
+                    final String asignatura = Normalize.normalizeWord(this.scanner.nextLine());
+
+                    Log.normal("Escriba el curso");
+                    final String curso = Normalize.normalizeWord(this.scanner.nextLine());
+
+                    Log.normal("Escriba la nota");
+                    final String nota = this.scanner.nextLine();
+
+                    float parsedNota;
+
+                    try {
+                        parsedNota = Float.parseFloat(nota);
+                        if (parsedNota < 0 || parsedNota > 10) {
+                            parsedNota = 0;
+                            Log.error("La nota debe ser entre 0 y 10. Poniendo 0 en su lugar");
+                        }
+                    } catch (NumberFormatException e) {
+                        parsedNota = 0;
+                        Log.error("La nota debe ser un número. Poniendo 0 en su lugar");
+                        Log.stack(e.getStackTrace());
                     }
 
-                    this.randomFiles.saveFile(fileName, sb.toString());
+                    Log.normal("Diga si está aprobado [s] o suspenso [n]");
+                    final boolean aprobado = this.scanner.nextLine().equalsIgnoreCase("s");
+
+                    this.randomFiles.saveFile(fileName, new Alumno(alumno, asignatura, curso, aprobado, parsedNota));
                     Log.div();
                     this.showMenu();
                     break;

@@ -46,8 +46,9 @@ public class XMLMenu {
                     Log.divWithBreak();
                     Log.normal("Escriba el nombre del archivo:");
                     final String fileName = this.scanner.nextLine();
-                    Log.normal("Escribe el contenido (Dar doble enter para finalizar):");
-
+                    Log.normal("Escribe el nodo principal");
+                    final String node = this.scanner.nextLine();
+                    this.xmlFiles.writeNewXML(fileName, node, this.scanner);
                     Log.div();
                     this.showMenu();
                     break;

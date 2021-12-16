@@ -1,15 +1,19 @@
 package es.ivan.acceso.files;
 
+import es.ivan.acceso.api.XMLGenerator;
 import es.ivan.acceso.files.type.FileType;
 import es.ivan.acceso.utils.Log;
 import lombok.NonNull;
 import org.w3c.dom.*;
 import org.xml.sax.SAXException;
 
+import javax.swing.*;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import java.io.File;
-import java.io.IOException;
+import javax.xml.transform.*;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+import java.io.*;
 import java.util.*;
 
 public class XMLFiles extends AbstractFile {
@@ -60,16 +64,20 @@ public class XMLFiles extends AbstractFile {
 
         if (!file.exists()) {
             try {
-                final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-                final Document document = factory.newDocumentBuilder().newDocument();
+                XMLGenerator xmlGenerator = new XMLGenerator(parentNode);
 
-                final Element root = document.createElement(parentNode);
+                Log.normal("Escribe el nodo hijo");
+                xmlGenerator = this.ask4Child(scanner, xmlGenerator, 0, scanner.nextLine());
 
-                String line;
-                while (!(line = scanner.nextLine()).equalsIgnoreCase("listo")) {
+                final Transformer tr = TransformerFactory.newInstance().newTransformer();
+                tr.setOutputProperty(OutputKeys.INDENT, "yes");
+                tr.setOutputProperty(OutputKeys.METHOD, "xml");
+                tr.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
 
-                }
-            } catch (ParserConfigurationException e) {
+                tr.transform(new DOMSource(xmlGenerator.build()), new StreamResult(fileName));
+
+                Log.success("Archivo guardado!");
+            } catch (ParserConfigurationException | TransformerException e) {
                 Log.error("El archivo no existe o no está bien formado");
                 Log.stack(e.getStackTrace());
             }
@@ -78,46 +86,43 @@ public class XMLFiles extends AbstractFile {
         }
     }
 
-    /**
-     * Ask4Child, return parent with child / siblings
-     *
-     * @param document
-     * @param parent
-     * @param line
-     * @return
-     */
-    private Element ask4Child(Document document, Element parent, String line) {
-        Element element;
-
+    private XMLGenerator ask4Child(Scanner scanner, XMLGenerator xmlGenerator, int type, String line) {
         // Formato: key(atrib): value || key(atrib)
         final String parsedXML = line.replaceAll("\\s", ""); // Borramos todos los espacios
 
-        if (parsedXML.contains(":")) {
-            final String[] realElement = parsedXML.split(":");
-            realElement[0] = realElement[0].split("\\(")[0];
+        final String[] realElement = parsedXML.split(":");
+        realElement[0] = realElement[0].split("\\(")[0];
 
-            if (realElement[1] == null) {
-                realElement[1] = "";
-                Log.warning("Elemento sin valor.");
+        final HashMap<String, String> attributes = this.parseAttributes(parsedXML.split("\\((.*?)\\)")[0].replace("(", "").replace(")", "").split("="));
+
+        if (type == 0) {
+            if (realElement.length > 1 && realElement[1] != null) {
+                xmlGenerator.addChildrenValue(realElement[0], realElement[1], attributes);
+            } else {
+                xmlGenerator.addChildren(realElement[0], attributes);
             }
-
-            element = document.createElement(realElement[0]);
-            element.setNodeValue(realElement[1]);
-            this.parseAttributes(parsedXML.split("\\((.*?)\\)")[0].replace("(", "").replace(")", "").split("=")).forEach(element::setAttribute);
-
-            parent.appendChild(element);
-
-            Log.normal("¿Añadir hermano? [S/N]");
-
         } else {
-            // Elemento con hijos
-
-            element = null;
-
-            parent = null; //new element from here
+            if (realElement.length > 1 && realElement[1] != null) {
+                xmlGenerator.addSiblingValue(realElement[0], realElement[1], attributes);
+            } else {
+                xmlGenerator.addSibling(realElement[0], attributes);
+            }
         }
 
-        return parent;
+        Log.normal("¿Añadir hijo? [S/N]");
+
+        if (scanner.nextLine().equalsIgnoreCase("s")) {
+            Log.normal("Escribe el nodo hijo");
+            return this.ask4Child(scanner, xmlGenerator, 0, scanner.nextLine());
+        } else {
+            Log.normal("¿Añadir hermano? [S/N]");
+            if (scanner.nextLine().equalsIgnoreCase("s")) {
+                Log.normal("Escribe el nodo hermano");
+                return this.ask4Child(scanner, xmlGenerator, 1, scanner.nextLine());
+            }
+        }
+
+        return xmlGenerator;
     }
 
     private HashMap<String, String> parseAttributes(String[] attributesString) {
@@ -167,7 +172,7 @@ public class XMLFiles extends AbstractFile {
 
             // Leemos el contenido
             final Node content = child.getChildNodes().item(0);
-            if (content != null && content.getNodeType() != Node.ELEMENT_NODE) sb.append(": ").append(content.getTextContent());
+            if (content != null && content.getNodeType() != Node.ELEMENT_NODE && !content.getTextContent().trim().isEmpty()) sb.append(": ").append(content.getTextContent());
 
             Log.normal(this.generateSpacer(tabs) + sb);
             sb.delete(0, sb.length());

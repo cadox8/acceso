@@ -6,7 +6,7 @@ Para poder ejecutar este código es obligatorio tener (mínimo) JAVA 8 instalado
 Para Lombok se requiere tener activado el **Annotation Processors**:
 
 ### IntelliJ
-Settings -> Build, Exewcution, Deployment -> Compiler -> Annotation Processors
+Settings -> Build, Execution, Deployment -> Compiler -> Annotation Processors
 
 ### NetBeans
 Project Properties -> Build -> Compiling

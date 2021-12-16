@@ -93,19 +93,9 @@ public class XMLFiles extends AbstractFile {
         final String parsedXML = line.replaceAll("\\s", ""); // Borramos todos los espacios
 
         if (parsedXML.contains(":")) {
-            // --- Atributos ---
-            final HashMap<String, String> attributes = new HashMap<>();
-            final String[] attributesParsed = parsedXML.split("@\"\\[(.+?)\\]\"")[0].split("=");
+            final String[] realElement = parsedXML.split(":");
+            realElement[0] = realElement[0].split("\\(")[0];
 
-            for (int i = 0; i < attributesParsed.length - 1; i += 2) {
-                if (attributesParsed[i] == null) attributesParsed[i] = "";
-                if (attributesParsed[i + 1] == null) attributesParsed[i + 1] = null;
-
-                attributes.put(attributesParsed[i], attributesParsed[i + 1]);
-            }
-            // ---  ---
-
-            final String[] realElement = parsedXML.replaceAll("@\"(.+?)\"", "").split(":");
             if (realElement[1] == null) {
                 realElement[1] = "";
                 Log.warning("Elemento sin valor.");
@@ -113,7 +103,7 @@ public class XMLFiles extends AbstractFile {
 
             element = document.createElement(realElement[0]);
             element.setNodeValue(realElement[1]);
-            attributes.forEach(element::setAttribute);
+            this.parseAttributes(parsedXML.split("\\((.*?)\\)")[0].replace("(", "").replace(")", "").split("=")).forEach(element::setAttribute);
 
             parent.appendChild(element);
 
@@ -128,6 +118,16 @@ public class XMLFiles extends AbstractFile {
         }
 
         return parent;
+    }
+
+    private HashMap<String, String> parseAttributes(String[] attributesString) {
+        final HashMap<String, String> attributes = new HashMap<>();
+        for (int i = 0; i < attributesString.length - 1; i += 2) {
+            if (attributesString[i] == null) attributesString[i] = "";
+            if (attributesString[i + 1] == null) attributesString[i + 1] = null;
+            attributes.put(attributesString[i], attributesString[i + 1]);
+        }
+        return attributes;
     }
 
     /**
@@ -167,7 +167,7 @@ public class XMLFiles extends AbstractFile {
 
             // Leemos el contenido
             final Node content = child.getChildNodes().item(0);
-            if (content.getNodeType() != Node.ELEMENT_NODE) sb.append(": ").append(content.getTextContent());
+            if (content != null && content.getNodeType() != Node.ELEMENT_NODE) sb.append(": ").append(content.getTextContent());
 
             Log.normal(this.generateSpacer(tabs) + sb);
             sb.delete(0, sb.length());

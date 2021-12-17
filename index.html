@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="utf-8">
+    <title>Acceso</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link href="//fonts.googleapis.com/css?family=Raleway:400,300,600" rel="stylesheet" type="text/css">
+
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/skeleton.css">
+
+</head>
+<body>
+
+<div class="container">
+    <div class="row">
+        <div class="one-half column" style="margin-top: 25%">
+            <h4>Acceso</h4>
+            <p>Pilla la build a descargar</p>
+            <form action="#">
+                <select class="u-full-width" id="build">
+                    <option value="2.0.0" selected>Versión 2.0.0</option>
+                </select>
+            </form>
+            <a id="download" class="button button-primary" href="#">Descargar: </a>
+        </div>
+    </div>
+</div>
+
+<script type="application/javascript">
+    document.addEventListener('DOMContentLoaded', () => {
+        document.getElementById("download").href = "builds/Acceso_2.0.0.jar";
+        document.getElementById("download").textContent = "Descargar: Versión 2.0.0"
+    }, false);
+
+    document.addEventListener('input', function (event) {
+        if (event.target.id !== 'build') return;
+        document.getElementById("download").href = "builds/Acceso_" + event.target.value + ".jar";
+        document.getElementById("download").textContent = "Descargar: Versión " + event.target.value;
+    }, false);
+</script>
+</body>
+</html>

@@ -2,19 +2,19 @@ package es.ivan.acceso.utils;
 
 import com.diogonunes.jcdp.color.ColoredPrinter;
 import com.diogonunes.jcdp.color.api.Ansi;
-import es.ivan.acceso.api.Alumno;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
-import java.io.*;
-import java.net.URI;
+import java.io.File;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.*;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 public class Log {
@@ -22,11 +22,11 @@ public class Log {
     @RequiredArgsConstructor
     public enum LogType {
         NORMAL(""),
-        WARNING("[AVISO] "),
-        ERROR("[ERROR] "),
-        DEBUG("[DEBUG] "),
-        SUCCESS("[CORRECTO] "),
-        STACK("[STACK] ");
+        WARNING("[!] "),
+        ERROR("[X] "),
+        DEBUG("[✎] "),
+        SUCCESS("[✔] "),
+        STACK("[☄] ");
 
         @Getter private final String prefix;
     }
@@ -69,6 +69,7 @@ public class Log {
      */
     public static void stack(StackTraceElement[] stack) {
         Log.toFile(LogType.STACK.getPrefix() + Arrays.stream(stack).map(StackTraceElement::toString).collect(Collectors.joining("\n")));
+        log(warning, LogType.WARNING, "Error guardado en archivo .log");
     }
 
     /**
@@ -122,7 +123,7 @@ public class Log {
     public static void clear() {
         try {
             final String os = System.getProperty("os.name");
-            if (os.contains("Windows")) {
+            if (os.toLowerCase().contains("windows")) {
                 new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
             } else {
                 new ProcessBuilder("cmd", "clear").inheritIO().start().waitFor();

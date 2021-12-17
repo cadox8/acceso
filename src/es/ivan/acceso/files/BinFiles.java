@@ -8,6 +8,7 @@ import es.ivan.acceso.utils.Normalize;
 
 import java.io.*;
 import java.util.HashMap;
+import java.util.TreeSet;
 
 public class BinFiles extends AbstractFile {
 
@@ -32,10 +33,7 @@ public class BinFiles extends AbstractFile {
 
         if (file.exists()) {
             try {
-                this.readObject(fileName).forEach((name, alum) -> {
-                    Log.normal(name + ":");
-                    this.showAlumnoInfo(alum, false);
-                });
+                this.readObject(fileName).forEach(alum -> this.showAlumnoInfo(alum, false));
             } catch (IOException | ClassNotFoundException e) {
                 Log.error("Ha ocurrido un error inesperado");
                 Log.stack(e.getStackTrace());
@@ -55,7 +53,7 @@ public class BinFiles extends AbstractFile {
 
         if (file.exists()) {
             try {
-                this.readObject(fileName).keySet().forEach(Log::normal);
+                this.readObject(fileName).forEach(a -> Log.normal(a.getNombre()));
             } catch (IOException | ClassNotFoundException e) {
                 Log.error("Ha ocurrido un error inesperado");
                 Log.stack(e.getStackTrace());
@@ -77,11 +75,11 @@ public class BinFiles extends AbstractFile {
 
         if (file.exists()) {
             try {
-                final HashMap<String, Alumno> alumnos = this.readObject(fileName);
+                final TreeSet<Alumno> alumnos = this.readObject(fileName);
                 alumno = Normalize.normalizeWord(alumno);
 
                 if (this.existsAlumno(alumnos, alumno)) {
-                    this.showAlumnoInfo(alumnos.get(alumno), true);
+                    this.showAlumnoInfo(getAlumno(alumnos, alumno), true);
                     return true;
                 }
                 return false;
@@ -101,10 +99,14 @@ public class BinFiles extends AbstractFile {
 
         if (file.exists()) {
             try {
-                final HashMap<String, Alumno> alumnos = this.readObject(fileName);
+                final TreeSet<Alumno> alumnos = this.readObject(fileName);
 
                 alumno = Normalize.normalizeWord(alumno);
-                if (alumnos.containsKey(alumno)) {
+
+                // Creamos la variable porque los valores a pasar en una lambda deben ser final o "final" (que no debe cambiar)
+                final String alumnoNombre = alumno;
+
+                if (alumnos.stream().anyMatch(a -> a.getNombre().equalsIgnoreCase(alumnoNombre))) {
                     Log.error("Ya existe este alumno. ¿No querrás editarlo, cruck?");
                     return;
                 }
@@ -124,7 +126,7 @@ public class BinFiles extends AbstractFile {
                     Log.error(nota + " > 10 ó < 0. Poniendo 0 por defecto");
                 }
 
-                alumnos.put(alum.getNombre(), alum);
+                alumnos.add(alum);
 
                 final ObjectOutputStream writer = new ObjectOutputStream(new FileOutputStream(this.getFile(fileName)));
                 writer.writeObject(alumnos);
@@ -153,12 +155,12 @@ public class BinFiles extends AbstractFile {
 
         if (file.exists()) {
             try {
-                final HashMap<String, Alumno> alumnos = this.readObject(fileName);
+                final TreeSet<Alumno> alumnos = this.readObject(fileName);
 
                 alumno = Normalize.normalizeWord(alumno);
                 if (!this.existsAlumno(alumnos, alumno)) return;
 
-                final Alumno alum = alumnos.get(alumno);
+                final Alumno alum = getAlumno(alumnos, alumno);
 
                 switch (selection) {
                     case 1:
@@ -200,13 +202,18 @@ public class BinFiles extends AbstractFile {
                 }
 
                 if (selection == 6) {
-                    alumnos.remove(alumno);
+                    alumnos.remove(alum);
                 } else {
-                    alumnos.put(alumno, alum);
+                    alumnos.add(alum);
                 }
 
                 final ObjectOutputStream writer = new ObjectOutputStream(new FileOutputStream(this.getFile(fileName)));
-                writer.writeObject(alumnos);
+
+                final HashMap<String, Alumno> alumnosMap = new HashMap<>();
+
+                alumnos.forEach(a -> alumnosMap.put(a.getNombre(), a));
+
+                writer.writeObject(alumnosMap);
                 writer.flush();
                 writer.close();
                 Log.success("Archivo guardado");
@@ -219,7 +226,39 @@ public class BinFiles extends AbstractFile {
         }
     }
 
-    private HashMap<String, Alumno> readObject(String fileName) throws IOException, ClassNotFoundException {
+    public void showDataOrder(String fileName, String orderBy) {
+        final File file = this.getFile(fileName);
+
+        if (file.exists()) {
+            try {
+                this.readObject(fileName).stream().sorted((a1, a2) -> {
+                    switch (orderBy.toLowerCase()) {
+                        case "nota":
+                            //
+                            final Float notaA1 = a1.getNota() == null ? 0.0F : a1.getNota();
+                            final Float notaA2 = a2.getNota() == null ? 0.0F : a2.getNota();
+                            return notaA2.compareTo(notaA1);
+                        case "asignatura":
+                            return a1.getAsignatura().compareTo(a2.getAsignatura());
+                        case "curso":
+                            return a1.getCurso().compareTo(a2.getCurso());
+                        case "aprobado":
+                            return a2.getAprobado().compareTo(a1.getAprobado());
+
+                        default:
+                            return a1.compareTo(a2);
+                    }
+                }).forEach(a -> this.showAlumnoInfo(a, false));
+            } catch (IOException | ClassNotFoundException e) {
+                Log.error("Ha ocurrido un error inesperado");
+                Log.stack(e.getStackTrace());
+            }
+        } else {
+            Log.error("No existe un archivo llamado " + fileName + ".bin");
+        }
+    }
+
+    private TreeSet<Alumno> readObject(String fileName) throws IOException, ClassNotFoundException {
         final ObjectInputStream reader = new BinParser(new FileInputStream(this.getFile(fileName)), "dam.AD", "es.ivan.acceso.api");
 
         final HashMap<?, ?> alumnos = (HashMap<?, ?>) reader.readObject();
@@ -228,19 +267,23 @@ public class BinFiles extends AbstractFile {
         alumnos.forEach((key, value) -> realAlumnos.put(Normalize.normalizeWord((String) key), (Alumno) value));
 
         reader.close();
-        return realAlumnos;
+        return new TreeSet<>(realAlumnos.values());
     }
 
-    private boolean existsAlumno(HashMap<String, Alumno> alumnos, String alumno) {
-        if (!alumnos.containsKey(alumno)) {
+    private boolean existsAlumno(TreeSet<Alumno> alumnos, String alumno) {
+        if (alumnos.stream().noneMatch(a -> a.getNombre().equalsIgnoreCase(alumno))) {
             Log.error("No existe el alumno " + alumno);
             return false;
         }
         return true;
     }
 
+    private Alumno getAlumno(TreeSet<Alumno> alumnos, String alumno) {
+        return alumnos.stream().filter(a -> a.getNombre().equalsIgnoreCase(alumno)).findAny().orElse(null);
+    }
+
     private void showAlumnoInfo(Alumno alumno, boolean deleteOption) {
-        Log.normal(alumno + ":");
+        Log.normal(alumno.getNombre() + ":");
         final StringBuilder sb = new StringBuilder();
         sb.append("  1. Nombre: " + Normalize.normalizeWord(alumno.getNombre()));
         sb.append("\n  2. Asignatura: " + Normalize.normalizeWord(alumno.getAsignatura()));

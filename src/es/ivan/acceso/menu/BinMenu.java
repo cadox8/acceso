@@ -3,8 +3,6 @@ package es.ivan.acceso.menu;
 import es.ivan.acceso.files.BinFiles;
 import es.ivan.acceso.utils.Log;
 
-import java.util.HashMap;
-import java.util.HashSet;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
@@ -31,9 +29,10 @@ public class BinMenu {
         Log.normal("1. Ver contenido de archivo");
         Log.normal("2. Editar/Borrar alumno");
         Log.normal("3. Añadir alumno");
-        Log.normal("4. Borrar archivo");
-        Log.normal("5. Ver archivos guardados");
-        Log.normal("6. Volver");
+        Log.normal("4. Ordenar por ...");
+        Log.normal("5. Borrar archivo");
+        Log.normal("6. Ver archivos guardados");
+        Log.normal("7. Volver");
         Log.div();
 
         try {
@@ -77,7 +76,7 @@ public class BinMenu {
                     Log.normal("Escriba el nombre del archivo:");
                     final String fileName2 = this.scanner.nextLine();
 
-                    Log.normal("Escriba el nombre del alumno a editar:");
+                    Log.normal("Escriba el nombre del alumno a añadir:");
                     final String alumno2 = this.scanner.nextLine();
 
                     Log.normal("Escriba la asignatura");
@@ -98,15 +97,30 @@ public class BinMenu {
                     break;
                 case 4:
                     Log.divWithBreak();
+
+                    Log.normal("Escriba el nombre del archivo:");
+                    final String fileName3 = this.scanner.nextLine();
+
+                    Log.normal("Escriba el parámetro por el que ordenar:");
+                    Log.warning("Posibles valores: nota, asignatura, nombre, curso, aprobado");
+                    final String orderBy = this.scanner.nextLine();
+
+                    this.binFiles.showDataOrder(fileName3, orderBy);
+
+                    Log.div();
+                    this.showMenu();
+                    break;
+                case 5:
+                    Log.divWithBreak();
                     Log.normal("Escriba el nombre del archivo:");
                     this.binFiles.removeFile(this.scanner.nextLine());
                     Log.div();
                     this.showMenu();
                     break;
-                case 5:
+                case 6:
                     this.binFiles.showFileTree();
                     break;
-                case 6:
+                case 7:
                     this.mainMenu.showMenu();
                     return;
                 default:

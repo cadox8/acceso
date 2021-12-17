@@ -1,12 +1,12 @@
 package es.ivan.acceso.menu;
 
 import es.ivan.acceso.utils.Log;
+import es.ivan.acceso.utils.RandomNumbers;
 
-import java.util.Arrays;
 import java.util.Locale;
 import java.util.NoSuchElementException;
 import java.util.Scanner;
-import java.util.stream.Collectors;
+import java.util.TreeSet;
 
 public class MainMenu {
 
@@ -16,6 +16,7 @@ public class MainMenu {
     private final PropertiesMenu propertiesMenu;
     private final BinMenu binMenu;
     private final XMLMenu xmlMenu;
+    private final RandomMenu randomMenu;
 
     public MainMenu() {
         this.scanner = new Scanner(System.in, "UTF-8");
@@ -25,6 +26,7 @@ public class MainMenu {
         this.propertiesMenu = new PropertiesMenu(this, this.scanner);
         this.binMenu = new BinMenu(this, this.scanner);
         this.xmlMenu = new XMLMenu(this, this.scanner);
+        this.randomMenu = new RandomMenu(this, this.scanner);
     }
 
     /**
@@ -37,7 +39,9 @@ public class MainMenu {
         Log.normal("2. Archivo de propiedades");
         Log.normal("3. Archivos Binarios");
         Log.normal("4. Archivos XML");
-        Log.normal("5. Salir");
+        Log.normal("5. Números aleatorios");
+        Log.normal("6. Lectura Aleatoria");
+        Log.normal("7. Salir");
         Log.div();
 
         try {
@@ -55,6 +59,12 @@ public class MainMenu {
                     this.xmlMenu.showMenu();
                     break;
                 case 5:
+                    final TreeSet<Integer> numbers = new RandomNumbers().generateRandomNumbers();
+                    Log.normal("Números [" + numbers.size() + "]: " + numbers);
+                    break;
+                case 6:
+                    this.randomMenu.showMenu();
+                case 7:
                     Log.warning("Ta luego pana");
                     System.exit(0);
                     break;

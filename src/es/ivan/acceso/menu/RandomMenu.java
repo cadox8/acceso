@@ -1,21 +1,24 @@
 package es.ivan.acceso.menu;
 
-import es.ivan.acceso.files.XMLFiles;
+import es.ivan.acceso.api.Alumno;
+import es.ivan.acceso.files.PlainFiles;
+import es.ivan.acceso.files.RandomFiles;
 import es.ivan.acceso.utils.Log;
+import es.ivan.acceso.utils.Normalize;
 
 import java.util.NoSuchElementException;
 import java.util.Scanner;
 
-public class XMLMenu {
+public class RandomMenu {
 
     private final MainMenu mainMenu;
-    private final XMLFiles xmlFiles;
+    private final RandomFiles randomFiles;
 
     private final Scanner scanner;
 
-    public XMLMenu(MainMenu mainMenu, Scanner scanner) {
+    public RandomMenu(MainMenu mainMenu, Scanner scanner) {
         this.mainMenu = mainMenu;
-        this.xmlFiles = new XMLFiles();
+        this.randomFiles = new RandomFiles();
 
         this.scanner = scanner;
     }
@@ -38,7 +41,7 @@ public class XMLMenu {
                 case 1:
                     Log.divWithBreak();
                     Log.normal("Escriba el nombre del archivo:");
-                    this.xmlFiles.showFileInfo(scanner.nextLine());
+                    this.randomFiles.showFileInfo(this.scanner.nextLine());
                     Log.div();
                     this.showMenu();
                     break;
@@ -46,21 +49,49 @@ public class XMLMenu {
                     Log.divWithBreak();
                     Log.normal("Escriba el nombre del archivo:");
                     final String fileName = this.scanner.nextLine();
-                    Log.normal("Escribe el nodo principal");
-                    final String node = this.scanner.nextLine();
-                    this.xmlFiles.writeNewXML(fileName, node, this.scanner);
+
+                    Log.normal("Escriba el nombre del alumno a añadir:");
+                    final String alumno = Normalize.normalizeWord(this.scanner.nextLine());
+
+                    Log.normal("Escriba la asignatura");
+                    final String asignatura = Normalize.normalizeWord(this.scanner.nextLine());
+
+                    Log.normal("Escriba el curso");
+                    final String curso = Normalize.normalizeWord(this.scanner.nextLine());
+
+                    Log.normal("Escriba la nota");
+                    final String nota = this.scanner.nextLine();
+
+                    float parsedNota;
+
+                    try {
+                        parsedNota = Float.parseFloat(nota);
+                        if (parsedNota < 0 || parsedNota > 10) {
+                            parsedNota = 0;
+                            Log.error("La nota debe ser entre 0 y 10. Poniendo 0 en su lugar");
+                        }
+                    } catch (NumberFormatException e) {
+                        parsedNota = 0;
+                        Log.error("La nota debe ser un número. Poniendo 0 en su lugar");
+                        Log.stack(e.getStackTrace());
+                    }
+
+                    Log.normal("Diga si está aprobado [s] o suspenso [n]");
+                    final boolean aprobado = this.scanner.nextLine().equalsIgnoreCase("s");
+
+                    this.randomFiles.saveFile(fileName, new Alumno(alumno, asignatura, curso, aprobado, parsedNota));
                     Log.div();
                     this.showMenu();
                     break;
                 case 3:
                     Log.divWithBreak();
                     Log.normal("Escriba el nombre del archivo:");
-                    this.xmlFiles.removeFile(this.scanner.nextLine());
+                    this.randomFiles.removeFile(this.scanner.nextLine());
                     Log.div();
                     this.showMenu();
                     break;
                 case 4:
-                    this.xmlFiles.showFileTree();
+                    this.randomFiles.showFileTree();
                     break;
                 case 5:
                     this.mainMenu.showMenu();

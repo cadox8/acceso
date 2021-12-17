@@ -9,7 +9,8 @@ public enum FileType {
     PLAIN("plain", ".txt"),
     PROP("properties", ".properties"),
     BIN("bin", ".bin"),
-    XML("xml", ".xml");
+    XML("xml", ".xml"),
+    RANDOM("random", PLAIN.ext);
 
     @Getter private final String folder;
     @Getter private final String ext;

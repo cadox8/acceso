@@ -5,9 +5,8 @@ import es.ivan.acceso.files.type.FileType;
 import es.ivan.acceso.utils.Log;
 
 import java.io.*;
-import java.util.Random;
 
-public class RandomFiles extends AbstractFile {
+public class  RandomFiles extends AbstractFile {
 
     /**
      * Constructor principal de la clase.

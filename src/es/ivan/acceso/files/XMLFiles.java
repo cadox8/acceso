@@ -111,7 +111,7 @@ public class XMLFiles extends AbstractFile {
     private XMLGenerator ask4Child(Scanner scanner, XMLGenerator xmlGenerator, int type, String line) {
         line = Normalize.normalizeWord(line);
 
-        // Formato: key(atrib): value || key(atrib)
+        // Formato: key(atrib): value || key(atrib) || key: value || key
         final String parsedXML = line.replaceAll("\\s", ""); // Borramos todos los espacios
 
         if (parsedXML.startsWith("#")) {

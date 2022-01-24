@@ -228,7 +228,6 @@ public class XMLGenerator {
     public XMLGenerator addComment(String commentText) {
         final Comment comment = this.dom.createComment(commentText);
         this.lastElement.appendChild(comment);
-        this.lastElement = (Element) comment;
         return this;
     }
 

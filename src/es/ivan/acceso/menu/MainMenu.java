@@ -1,5 +1,9 @@
 package es.ivan.acceso.menu;
 
+import es.ivan.acceso.ems.Ems;
+import es.ivan.acceso.ems.display.Display;
+import es.ivan.acceso.ems.input.KeyManager;
+import es.ivan.acceso.ems.input.MouseManager;
 import es.ivan.acceso.utils.Log;
 import es.ivan.acceso.utils.RandomNumbers;
 
@@ -41,7 +45,8 @@ public class MainMenu {
         Log.normal("4. Archivos XML");
         Log.normal("5. Números aleatorios");
         Log.normal("6. Lectura Aleatoria");
-        Log.normal("7. Salir");
+        Log.normal("7. Base de datos");
+        Log.normal("8. Salir");
         Log.div();
 
         try {
@@ -64,7 +69,13 @@ public class MainMenu {
                     break;
                 case 6:
                     this.randomMenu.showMenu();
+                    break;
                 case 7:
+                    final Ems ems = new Ems();
+                    ems.load();
+                    ems.start();
+                    break;
+                case 8:
                     Log.warning("Ta luego pana");
                     System.exit(0);
                     break;

@@ -46,6 +46,4 @@ public class Database {
         this.connection = DriverManager.getConnection("jdbc:mysql://" + this.hostname + ":" + this.port + "/" + this.database + "?autoReconnect=true", this.user, this.password);
         return this.connection;
     }
-
-    // --- Class ---
 }

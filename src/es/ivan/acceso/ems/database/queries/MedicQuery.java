@@ -12,11 +12,11 @@ import java.util.List;
 public class MedicQuery extends AbstractQuery {
 
     public List<Medic> getAllMedics() {
-        List<Medic> medics = new ArrayList<>();
+        final List<Medic> medics = new ArrayList<>();
         try {
-            final PreparedStatement loginStatement = this.preparedStatement("select `id`, `username`, `name`, `role`, `admin`, `active` from `users`");
+            final PreparedStatement medicStatement = this.preparedStatement("select `id`, `username`, `name`, `role`, `admin`, `active` from `users`");
 
-            final ResultSet result = loginStatement.executeQuery();
+            final ResultSet result = medicStatement.executeQuery();
 
             while (result.next()) {
                 medics.add(new Medic(result.getInt("id"), result.getString("username"), result.getString("name"), result.getInt("role"), result.getInt("admin"), result.getInt("active")));

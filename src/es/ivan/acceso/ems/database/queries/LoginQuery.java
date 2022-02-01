@@ -12,14 +12,14 @@ public class LoginQuery extends AbstractQuery {
     public Medic login(String username, String password) {
         Medic medic = null;
         try {
-            final PreparedStatement loginStatement = this.preparedStatement("select `id`, `name`, `role`, `admin`, `active` from `users` where `username`=? and `password`=?");
+            final PreparedStatement loginStatement = this.preparedStatement("select `id`, `username`, `name`, `role`, `admin`, `active` from `users` where `username`=? and `password`=?");
             loginStatement.setString(1, username);
             loginStatement.setString(2, password);
 
             final ResultSet result = loginStatement.executeQuery();
 
             while (result.next()) {
-                medic = new Medic(result.getInt("id"), "___", result.getString("name"), result.getInt("role"), result.getInt("admin"), result.getInt("active"));
+                medic = new Medic(result.getInt("id"), result.getString("username"), result.getString("name"), result.getInt("role"), result.getInt("admin"), result.getInt("active"));
             }
         } catch (SQLException e) {
             Log.error(e.getMessage());

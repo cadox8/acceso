@@ -2,6 +2,10 @@
 /target/
 /files/
 
+out/*
+
+*.jar
+
 .idea
 *.iml
 

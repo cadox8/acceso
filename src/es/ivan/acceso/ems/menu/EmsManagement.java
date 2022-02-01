@@ -4,11 +4,14 @@ import es.ivan.acceso.Acceso;
 import es.ivan.acceso.ems.Ems;
 import es.ivan.acceso.ems.api.Rank;
 import es.ivan.acceso.ems.database.queries.MedicQuery;
+import es.ivan.acceso.ems.database.queries.PatientQuery;
 import es.ivan.acceso.ems.utils.Table;
 import es.ivan.acceso.log.Log;
 import lombok.RequiredArgsConstructor;
 
 import java.io.Console;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.NoSuchElementException;
 
 @RequiredArgsConstructor
@@ -46,7 +49,9 @@ public class EmsManagement {
         try {
             switch (Integer.parseInt(this.console.readLine())) {
                 case 1:
-
+                    Log.putBreak(1);
+                    Log.normal(this.table.toTable(new PatientQuery().getPatients(-1), Table.TableType.PATIENT));
+                    Log.putBreak(1);
                     break;
                 case 2:
 
@@ -57,15 +62,14 @@ public class EmsManagement {
                 case 4:
                     if (this.instance.getOwn().getRank() != Rank.JEFE) throw new NoSuchElementException();
 
-
                     Log.putBreak(1);
-                    Log.normal(this.table.medicsToTable(new MedicQuery().getAllMedics()));
+                    Log.normal(this.table.toTable(new MedicQuery().getAllMedics(), Table.TableType.MEDIC));
                     Log.putBreak(1);
 
                     break;
                 case 5:
                     Log.putBreak(1);
-                    Log.normal(this.table.medicToTable(this.instance.getOwn()));
+                    Log.normal(this.table.toTable(Collections.singletonList(this.instance.getOwn()), Table.TableType.MEDIC));
                     Log.putBreak(1);
                     break;
                 case 6:

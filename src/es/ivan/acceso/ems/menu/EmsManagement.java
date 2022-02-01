@@ -3,6 +3,7 @@ package es.ivan.acceso.ems.menu;
 import es.ivan.acceso.Acceso;
 import es.ivan.acceso.ems.Ems;
 import es.ivan.acceso.ems.api.Rank;
+import es.ivan.acceso.ems.database.queries.MedicQuery;
 import es.ivan.acceso.ems.utils.Table;
 import es.ivan.acceso.log.Log;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ public class EmsManagement {
     private final Ems instance;
 
     private final Console console;
+    private final Table table = new Table();
 
     public void showMenu() {
         Log.div();
@@ -24,18 +26,21 @@ public class EmsManagement {
         Log.divWithBreakEnd();
 
         Log.normal("Seleccione donde quiere acceder:");
-        Log.normal("[1] Ver pacientes");
-        Log.normal("[2] Añadir paciente");
-        Log.normal("[3] ????");
+        Log.info("[*] Consulta general");
+        Log.normal("  [1] Ver pacientes");
+        Log.normal("  [2] Añadir paciente");
+        Log.normal("  [3] ????");
+        Log.putBreak(1);
 
         if (this.instance.getOwn().getRank() == Rank.JEFE) {
             Log.info("[*] Gestión administrativa");
-            Log.normal("[4] Ver equipo médico");
+            Log.normal("  [4] Ver equipo médico");
+            Log.putBreak(1);
         }
 
         Log.info("[*] Gestión propia");
-        Log.normal("[5] Ver información propia");
-        Log.normal("[6] Desconectarse");
+        Log.normal("  [5] Ver información propia");
+        Log.normal("  [6] Desconectarse");
         Log.div();
 
         try {
@@ -50,10 +55,18 @@ public class EmsManagement {
 
                     break;
                 case 4:
+                    if (this.instance.getOwn().getRank() != Rank.JEFE) throw new NoSuchElementException();
+
+
+                    Log.putBreak(1);
+                    Log.normal(this.table.medicsToTable(new MedicQuery().getAllMedics()));
+                    Log.putBreak(1);
 
                     break;
                 case 5:
-                    Log.normal(Table.toTable(this.instance.getOwn()));
+                    Log.putBreak(1);
+                    Log.normal(this.table.medicToTable(this.instance.getOwn()));
+                    Log.putBreak(1);
                     break;
                 case 6:
                     this.instance.logout();
@@ -67,6 +80,8 @@ public class EmsManagement {
             Log.stack(e.getStackTrace());
             this.showMenu();
         }
+        Log.normal("Pulse cualquier tecla para continuar...");
+        this.console.readLine();
         this.showMenu();
     }
 }

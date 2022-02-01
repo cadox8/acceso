@@ -19,7 +19,7 @@ public class LoginQuery extends AbstractQuery {
             final ResultSet result = loginStatement.executeQuery();
 
             while (result.next()) {
-                medic = new Medic(result.getInt("id"), result.getString("name"), result.getInt("role"), result.getInt("admin"), result.getInt("active"));
+                medic = new Medic(result.getInt("id"), "___", result.getString("name"), result.getInt("role"), result.getInt("admin"), result.getInt("active"));
             }
         } catch (SQLException e) {
             Log.error(e.getMessage());

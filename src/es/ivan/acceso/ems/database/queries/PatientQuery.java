@@ -17,11 +17,15 @@ public class PatientQuery extends AbstractQuery {
         try {
             final PreparedStatement patientsStatement = this.preparedStatement("select * from `patients`");
             final ResultSet resultSet = patientsStatement.executeQuery();
+            int rowCount = 0;
 
             while (resultSet.next()) {
                 patients.add(new Patient(resultSet.getInt("id"), resultSet.getString("name"), resultSet.getString("phone"), resultSet.getDate("dob"),
                         resultSet.getDouble("weight"), resultSet.getDouble("height"), resultSet.getString("blood")));
+                rowCount++;
             }
+
+            Log.info("[*] Pacientes totales: " + rowCount);
         } catch (SQLException e) {
             Log.error(e.getMessage());
             Log.stack(e.getStackTrace());

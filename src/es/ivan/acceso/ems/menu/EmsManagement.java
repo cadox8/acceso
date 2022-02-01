@@ -5,6 +5,8 @@ import es.ivan.acceso.ems.Ems;
 import es.ivan.acceso.ems.api.Rank;
 import es.ivan.acceso.ems.database.queries.MedicQuery;
 import es.ivan.acceso.ems.database.queries.PatientQuery;
+import es.ivan.acceso.ems.utils.AddPatient;
+import es.ivan.acceso.ems.utils.PatientsPaginator;
 import es.ivan.acceso.ems.utils.Table;
 import es.ivan.acceso.log.Log;
 import lombok.RequiredArgsConstructor;
@@ -50,11 +52,13 @@ public class EmsManagement {
             switch (Integer.parseInt(this.console.readLine())) {
                 case 1:
                     Log.putBreak(1);
-                    Log.normal(this.table.toTable(new PatientQuery().getPatients(-1), Table.TableType.PATIENT));
+                    new PatientsPaginator(this.console, new PatientQuery().getPatients());
                     Log.putBreak(1);
                     break;
                 case 2:
-
+                    Log.putBreak(1);
+                    new AddPatient(this.console).start();
+                    Log.putBreak(1);
                     break;
                 case 3:
 

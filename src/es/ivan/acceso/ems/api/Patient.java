@@ -1,30 +1,35 @@
 package es.ivan.acceso.ems.api;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 import java.util.Date;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Patient extends AbstractAPI {
 
     @LocalizeName(value = "Id")
-    private final int id;
+    private int id;
 
     @LocalizeName(value = "Nombre")
-    private final String name;
+    private String name;
 
     @LocalizeName(value = "Teléfono")
-    private final String phone;
+    private String phone;
 
     @LocalizeName("Año de nacimiento")
-    private final Date dob;
+    private Date dob;
 
     @LocalizeName(value = "Altura")
-    private final double height;
+    private double height;
 
     @LocalizeName(value = "Peso")
-    private final double weight;
+    private double weight;
 
     @LocalizeName(value = "Tipo de Sangre")
-    private final String blood;
+    private String blood;
 }

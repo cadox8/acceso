@@ -17,7 +17,7 @@ public class Ems {
 
     // --- ---
 
-    @Getter private final Console console;
+    @Getter private Console console;
 
     @Getter private Database database;
 
@@ -26,7 +26,13 @@ public class Ems {
     public Ems() {
         instance = this;
 
-        this.console = System.console();
+        try {
+            this.console = System.console();
+        } catch (NullPointerException e) {
+            Log.stack(e.getStackTrace());
+            Log.error("No estás con una consola soportada");
+            System.exit(-1);
+        }
 
         try {
             this.database = new Database("localhost", "root", "ems");

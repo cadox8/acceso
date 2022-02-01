@@ -1,3 +1,6 @@
+create database ems;
+use ems;
+
 -- MariaDB dump 10.19  Distrib 10.4.21-MariaDB, for Win64 (AMD64)
 --
 -- Host: 127.0.0.1    Database: ems
@@ -23,14 +26,14 @@ DROP TABLE IF EXISTS `checks`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `checks` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `emsID` int(11) NOT NULL,
-  `userID` int(11) NOT NULL,
-  `problem` longtext NOT NULL,
-  `date` timestamp NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`id`),
-  KEY `userID` (`userID`),
-  CONSTRAINT `checks_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `patients` (`id`) ON DELETE CASCADE
+                          `id` int(11) NOT NULL AUTO_INCREMENT,
+                          `emsID` int(11) NOT NULL,
+                          `userID` int(11) NOT NULL,
+                          `problem` longtext NOT NULL,
+                          `date` timestamp NOT NULL DEFAULT current_timestamp(),
+                          PRIMARY KEY (`id`),
+                          KEY `userID` (`userID`),
+                          CONSTRAINT `checks_ibfk_1` FOREIGN KEY (`userID`) REFERENCES `patients` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -51,12 +54,12 @@ DROP TABLE IF EXISTS `patients`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `patients` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `phone` varchar(9) NOT NULL,
-  `dob` date NOT NULL,
-  `height` double(2, 5) NOT NULL DEFAULT 0.0,
-  `weight` domain(2, 5) NOT NULL DEFAULT 0.0,
+                            `id` int(11) NOT NULL AUTO_INCREMENT,
+                            `name` varchar(255) NOT NULL,
+                            `phone` varchar(9) NOT NULL,
+                            `dob` date NOT NULL,
+                            `height` double(5, 2) NOT NULL DEFAULT 0.0,
+  `weight` double(5, 2) NOT NULL DEFAULT 0.0,
   `blood` varchar(3) NOT NULL DEFAULT '',
   `allergic` longtext NOT NULL,
   `medics` longtext NOT NULL,
@@ -70,9 +73,9 @@ CREATE TABLE `patients` (
 -- Dumping data for table `people`
 --
 
-LOCK TABLES `people` WRITE;
-/*!40000 ALTER TABLE `people` DISABLE KEYS */;
-/*!40000 ALTER TABLE `people` ENABLE KEYS */;
+LOCK TABLES `patients` WRITE;
+/*!40000 ALTER TABLE `patients` DISABLE KEYS */;
+/*!40000 ALTER TABLE `patients` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -83,14 +86,14 @@ DROP TABLE IF EXISTS `users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `users` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `username` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `role` int(11) NOT NULL DEFAULT 0,
-  `admin` int(11) NOT NULL DEFAULT 0,
-  `active` int(11) NOT NULL DEFAULT 1,
-  PRIMARY KEY (`id`)
+                         `id` int(11) NOT NULL AUTO_INCREMENT,
+                         `name` varchar(255) NOT NULL,
+                         `username` varchar(255) NOT NULL,
+                         `password` varchar(255) NOT NULL,
+                         `role` int(11) NOT NULL DEFAULT 0,
+                         `admin` int(11) NOT NULL DEFAULT 0,
+                         `active` int(11) NOT NULL DEFAULT 1,
+                         PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4;
 /*!40101 SET character_set_client = @saved_cs_client */;
 

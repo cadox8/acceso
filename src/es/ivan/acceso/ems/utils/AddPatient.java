@@ -18,6 +18,7 @@ public class AddPatient {
 
     public void start() {
         this.patient = new Patient();
+        this.patient.setId(-1);
         this.askName(true);
     }
 
@@ -78,7 +79,7 @@ public class AddPatient {
 
     private void check() {
         Log.putBreak(1);
-        new Table().toTable(Collections.singletonList(this.patient), Table.TableType.PATIENT);
+        Log.normal(new Table().patientsToTable(Collections.singletonList(this.patient)));
         Log.putBreak(1);
         Log.info("[*] Revisa si los datos son correctos");
         Log.normal("[1-6] -> Editar valores | [X] -> Guardar Paciente");
@@ -109,8 +110,11 @@ public class AddPatient {
             this.check();
         } catch (NumberFormatException e) {
             if (selection.equalsIgnoreCase("x")) {
-                new PatientQuery().addPatient(this.patient);
-                Log.success("Paciente guardado");
+                if (new PatientQuery().addPatient(this.patient)) {
+                    Log.success("Paciente guardado");
+                } else {
+                    Log.error("Ha ocurrido un error al guardar al paciente.");
+                }
                 return;
             }
             Log.stack(e.getStackTrace());

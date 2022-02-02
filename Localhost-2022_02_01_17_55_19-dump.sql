@@ -104,6 +104,7 @@ CREATE TABLE `users` (
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 INSERT INTO `users` VALUES (1,'Iván Rica','ivan.ric','123abc4d',5,1,1),(2,'Nerea Álvarez','nerea.alv','123456',3,1,1);
+insert into `patients` values (1, 'Diego Rica', '636703986', 1.78, 73.8, 'O+', '', '', '');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;

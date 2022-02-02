@@ -6,13 +6,12 @@ import es.ivan.acceso.ems.api.Rank;
 import es.ivan.acceso.ems.database.queries.MedicQuery;
 import es.ivan.acceso.ems.database.queries.PatientQuery;
 import es.ivan.acceso.ems.utils.AddPatient;
-import es.ivan.acceso.ems.utils.PatientsPaginator;
+import es.ivan.acceso.ems.paginators.PatientsPaginator;
 import es.ivan.acceso.ems.utils.Table;
 import es.ivan.acceso.log.Log;
 import lombok.RequiredArgsConstructor;
 
 import java.io.Console;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.NoSuchElementException;
 
@@ -34,7 +33,7 @@ public class EmsManagement {
         Log.info("[*] Consulta general");
         Log.normal("  [1] Ver pacientes");
         Log.normal("  [2] Añadir paciente");
-        Log.normal("  [3] ????");
+        Log.normal("  [3] Ver últimas intervenciones");
         Log.putBreak(1);
 
         if (this.instance.getOwn().getRank() == Rank.JEFE) {

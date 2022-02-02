@@ -7,7 +7,43 @@ import java.util.*;
 
 public class Table {
 
-    // --- General ---
+    /**
+     * Método para generar una tabla (con cabecera) a partir de una lista de objetos
+     *
+     * @param medics Los médicos
+     * @return Un String con el valor de los objetos formateados como tabla
+     */
+    public String medicsToTable(List<Medic> medics) {
+        return this.toTable(medics, TableType.MEDIC);
+    }
+
+    /**
+     * Método para generar una tabla (con cabecera) a partir de una lista de objetos
+     *
+     * @param interventions Las intervenciones
+     * @return Un String con el valor de los objetos formateados como tabla
+     */
+    public String interventionsToTable(List<Interventions> interventions) {
+        return this.toTable(interventions, TableType.INTERVENTIONS);
+    }
+
+    /**
+     * Método para generar una tabla (con cabecera) a partir de una lista de objetos
+     *
+     * @param patients Los pacientes
+     * @return Un String con el valor de los objetos formateados como tabla
+     */
+    public String patientsToTable(List<Patient> patients) {
+        return this.toTable(patients, TableType.PATIENT);
+    }
+
+    /**
+     * Método para generar una tabla (con cabecera) a partir de una lista de objetos
+     *
+     * @param objects Los objetos que queremos mostrar como tabla
+     * @param type El tipo de objeto que le estamos pasando
+     * @return Un String con el valor de los objetos formateados como tabla
+     */
     public String toTable(List<? extends AbstractAPI> objects, TableType type) {
         final List<String> headers = new ArrayList<>();
         final HashMap<Integer, List<String>> body = new HashMap<>();
@@ -32,6 +68,7 @@ public class Table {
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 }
+                f.setAccessible(false);
             });
             body.put(i, tempBody);
         }
@@ -52,8 +89,6 @@ public class Table {
                     }
                 }
             });
-        } else {
-
         }
         // --- ---
 
@@ -62,7 +97,11 @@ public class Table {
             final int maxLength = Math.max(headers.get(i).length(), this.maxLength(body, i));
             headers.set(i, this.fixLength(headers.get(i), maxLength));
             int finalI = i;
-            body.values().forEach(l -> this.fixLength(l.get(finalI), maxLength));
+
+            body.forEach((id, list) -> {
+                list.set(finalI, this.fixLength(list.get(finalI), maxLength));
+                body.put(id, list);
+            });
         }
         // --- ---
 
@@ -75,24 +114,45 @@ public class Table {
     }
 
     // --- Utils ---
+
+    /**
+     * Método que devuelve el contenido de una lista con un formato de tabla
+     *
+     * @param list La lista
+     * @return El contenido de la lista como tabla
+     */
     private String formatList(final List<String> list) {
         return list.toString().replaceAll("\\[", "| ").replaceAll("]", " |").replaceAll(",", " |");
     }
 
+    /**
+     * Método para ajustar la longitud de cada campo al valor máximo
+     *
+     * @param text El texto para ajustar
+     * @param length La longitud final del texto a ajustar
+     * @return El texto ajustado a la longitud
+     */
     private String fixLength(String text, int length) {
         final StringBuilder textBuilder = new StringBuilder(text);
         for (int i = text.length(); i <= length; i++) textBuilder.append(" ");
         return textBuilder.toString();
     }
 
+    /**
+     * Método para calcular la máxima longitud de cada campo de la lista con respecto a todos los campos de todas las listas del HashMap
+     *
+     * @param body El HashMap con todas las listas
+     * @param search El índice de la lista que estamos comparando
+     * @return La máxima longitud de cada campo de la lista con respecto a todos los campos de todas las listas del HashMap
+     */
     private int maxLength(HashMap<Integer, List<String>> body, int search) {
         final Integer[] lengths = new Integer[body.keySet().size()];
         body.forEach((id, content) -> lengths[id] = content.get(search).length());
-        Arrays.sort(lengths, (l1, l2) -> l1 > l2 ? 1 : -1);
+        Arrays.sort(lengths, Comparator.naturalOrder());
         return lengths[0];
     }
 
     public enum TableType {
-        MEDIC, PATIENT
+        MEDIC, PATIENT, INTERVENTIONS
     }
 }

@@ -1,39 +1,32 @@
 package es.ivan.acceso.ems.api;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 
 @Data
-@RequiredArgsConstructor
+@AllArgsConstructor
+@NoArgsConstructor
 public class Medic extends AbstractAPI {
 
     @LocalizeName(value = "Id")
-    private final int id;
+    private int id;
 
     @LocalizeName(value = "Usuario")
-    private final String username;
+    private String username;
 
     @LocalizeName(value = "Nombre")
-    private final String name;
+    private String name;
 
     @LocalizeName(value = "Rango")
-    private final int rank;
+    private int rank;
     @LocalizeName(value = "Administrador")
-    private final int admin;
+    private int admin;
 
     @LocalizeName(value = "¿Activo?")
-    private final int active;
-
+    private int active;
 
     public Rank getRank() {
         return Rank.parseRank(this.rank);
-    }
-
-    public boolean isAdmin() {
-        return this.admin == 1;
-    }
-
-    public boolean isActive() {
-        return this.active == 1;
     }
 }

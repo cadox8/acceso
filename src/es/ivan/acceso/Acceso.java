@@ -8,7 +8,7 @@ import java.io.*;
 
 public class Acceso {
 
-    @Getter private static String VERSION = "3.0.0-SNAPSHOT";
+    @Getter private static String VERSION = "3.0.0";
 
     /**
      * Main class & method to start the program

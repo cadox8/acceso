@@ -21,8 +21,8 @@ public class Patient extends AbstractAPI {
     @LocalizeName(value = "Teléfono")
     private String phone;
 
-    @LocalizeName("Año de nacimiento")
-    private Date dob;
+    @LocalizeName("Edad")
+    private int age;
 
     @LocalizeName(value = "Altura")
     private double height;

@@ -21,7 +21,7 @@ public class PatientQuery extends AbstractQuery {
             final ResultSet resultSet = patientsStatement.executeQuery();
 
             while (resultSet.next()) {
-                patients.add(new Patient(resultSet.getInt("id"), resultSet.getString("name"), resultSet.getString("phone"), resultSet.getDate("dob"),
+                patients.add(new Patient(resultSet.getInt("id"), resultSet.getString("name"), resultSet.getString("phone"), resultSet.getInt("age"),
                         resultSet.getDouble("weight"), resultSet.getDouble("height"), resultSet.getString("blood")));
             }
         } catch (SQLException e) {
@@ -34,12 +34,12 @@ public class PatientQuery extends AbstractQuery {
     public Patient getPatientById(int id) {
         Patient patient = null;
         try {
-            final PreparedStatement patientStatement = this.preparedStatement("select * from `users` where `id`=?");
+            final PreparedStatement patientStatement = this.preparedStatement("select * from `patients` where `id`=?");
             patientStatement.setInt(1, id);
             final ResultSet resultSet = patientStatement.executeQuery();
 
             while (resultSet.next()) {
-                patient = new Patient(resultSet.getInt("id"), resultSet.getString("name"), resultSet.getString("phone"), resultSet.getDate("dob"),
+                patient = new Patient(resultSet.getInt("id"), resultSet.getString("name"), resultSet.getString("phone"), resultSet.getInt("age"),
                         resultSet.getDouble("weight"), resultSet.getDouble("height"), resultSet.getString("blood"));
             }
         } catch (SQLException e) {
@@ -64,10 +64,10 @@ public class PatientQuery extends AbstractQuery {
 
     public boolean addPatient(Patient patient) {
         try {
-            final PreparedStatement patientsStatement = this.preparedStatement("insert into `patients`(`name`, `phone`, `dob`, `height`, `weight`, `blood`) values (?, ?, ?, ?, ?, ?)");
+            final PreparedStatement patientsStatement = this.preparedStatement("insert into `patients`(`name`, `phone`, `age`, `height`, `weight`, `blood`) values (?, ?, ?, ?, ?, ?)");
             patientsStatement.setString(1, patient.getName());
             patientsStatement.setString(2, patient.getPhone());
-            patientsStatement.setDate(3, new Date(patient.getDob().getTime()));
+            patientsStatement.setInt(3, patient.getAge());
             patientsStatement.setDouble(4, patient.getHeight());
             patientsStatement.setDouble(5, patient.getWeight());
             patientsStatement.setString(6, patient.getBlood());
@@ -80,16 +80,17 @@ public class PatientQuery extends AbstractQuery {
         return false;
     }
 
-    public boolean editPatient(Patient patient) {
+    public boolean updatePatient(Patient patient) {
         try {
-            final PreparedStatement patientsStatement = this.preparedStatement("insert into `patients`(`name`, `phone`, `dob`, `height`, `weight`, `blood`) values (?, ?, ?, ?, ?, ?)");
-            patientsStatement.setString(1, patient.getName());
-            patientsStatement.setString(2, patient.getPhone());
-            patientsStatement.setDate(3, new Date(patient.getDob().getTime()));
-            patientsStatement.setDouble(4, patient.getHeight());
-            patientsStatement.setDouble(5, patient.getWeight());
-            patientsStatement.setString(6, patient.getBlood());
-            patientsStatement.executeUpdate();
+            final PreparedStatement patientStatement = this.preparedStatement("update `patients` set `name`=?, `phone`=?, `age`=?, `height`=?, `weight`=?, `blood`=? where `id`=?");
+            patientStatement.setString(1, patient.getName());
+            patientStatement.setString(2, patient.getPhone());
+            patientStatement.setInt(3, patient.getAge());
+            patientStatement.setDouble(4, patient.getHeight());
+            patientStatement.setDouble(5, patient.getWeight());
+            patientStatement.setString(6, patient.getBlood());
+            patientStatement.setInt(7, patient.getId());
+            patientStatement.executeUpdate();
             return true;
         } catch (SQLException e) {
             Log.error(e.getMessage());

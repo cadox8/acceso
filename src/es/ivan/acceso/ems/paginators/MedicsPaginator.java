@@ -40,7 +40,7 @@ public class MedicsPaginator {
         Log.putBreak(1);
 
         if (this.medics.stream().anyMatch(p -> p.getId() == id)) {
-            Log.normal(this.table.toTable(Collections.singletonList(this.medics.get(id - 1)), Table.TableType.PATIENT));
+            Log.normal(this.table.medicsToTable(Collections.singletonList(this.medics.get(id - 1))));
         } else {
             Log.error("No hay ningún médico con la Id " + id);
             this.showMedics();
@@ -54,7 +54,7 @@ public class MedicsPaginator {
 
         switch (this.console.readLine()) {
             case "e":
-                // ToDo
+                new AddMedic(this.console).startFromMedic(this.medics.get(id - 1));
                 break;
             case "r":
                 this.medicQuery.removeMedic(id);
@@ -84,8 +84,7 @@ public class MedicsPaginator {
 
     private void showMedics() {
         Log.putBreak(1);
-        Log.info("[*] Página " + (this.currentPage + 1) + "/" + (this.medics.size() / 20 + 1));
-        Log.normal(this.table.toTable(this.medics.subList(this.currentPage * 20, Math.min(this.medics.size(), 20)), Table.TableType.PATIENT));
+        Log.normal(this.table.medicsToTable(this.medics.subList(this.currentPage * 20, Math.min(this.medics.size(), (this.currentPage + 1) * 20))));
         Log.putBreak(1);
 
         Log.info("Seleccione una de las siguientes opciones:");

@@ -1,8 +1,7 @@
 package es.ivan.acceso.ems.paginators;
 
-import es.ivan.acceso.ems.api.Interventions;
+import es.ivan.acceso.ems.api.Intervention;
 import es.ivan.acceso.ems.database.queries.InterventionsQuery;
-import es.ivan.acceso.ems.database.queries.PatientQuery;
 import es.ivan.acceso.ems.utils.Table;
 import es.ivan.acceso.log.Log;
 
@@ -14,19 +13,19 @@ public class InterventionsPaginator {
 
     private final Console console;
 
-    private final List<Interventions> interventions;
+    private final List<Intervention> interventions;
     private final Table table;
 
     private int currentPage;
 
     private final InterventionsQuery interventionsQuery;
 
-    public InterventionsPaginator(Console console, List<Interventions> interventions) {
+    public InterventionsPaginator(Console console, List<Intervention> interventions) {
         this.console = console;
         this.interventions = interventions;
         this.table = new Table();
 
-        Log.info("[*] Pacientes totales: " + this.interventions.size());
+        Log.info("[*] Intervenciones totales: " + this.interventions.size());
 
         this.currentPage = 0;
 
@@ -53,11 +52,12 @@ public class InterventionsPaginator {
 
         switch (this.console.readLine()) {
             case "r":
+                this.interventionsQuery.removeIntervention(id);
                 Log.success("La intervención [" + id + "] ha sido eliminado correctamente!");
                 break;
             case "x":
                 this.showInterventions();
-                return;
+                break;
             default:
                 Log.error("Lo sentimos, no sabemos que has introducido");
                 this.showIntervention(id);
@@ -80,7 +80,7 @@ public class InterventionsPaginator {
     private void showInterventions() {
         Log.putBreak(1);
         Log.info("[*] Página " + (this.currentPage + 1) + "/" + (this.interventions.size() / 20 + 1));
-        Log.normal(this.table.interventionsToTable(this.interventions.subList(this.currentPage * 20, Math.min(this.interventions.size(), 20))));
+        Log.normal(this.table.interventionsToTable(this.interventions.subList(this.currentPage * 20, Math.min(this.interventions.size(), (this.currentPage + 1) * 20))));
         Log.putBreak(1);
 
         Log.info("Seleccione una de las siguientes opciones:");
@@ -99,7 +99,7 @@ public class InterventionsPaginator {
                     this.next();
                     break;
                 case "x":
-                    return;
+                    break;
                 default:
                     Log.error("Lo sentimos, no sabemos que has introducido");
                     this.showInterventions();

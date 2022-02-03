@@ -61,15 +61,48 @@ public class MedicQuery extends AbstractQuery {
         return false;
     }
 
-    public boolean addMedic(Medic medic) {
+    public boolean addMedic(Medic medic, String password) {
         try {
-            final PreparedStatement patientsStatement = this.preparedStatement("insert into `users`(`name`, `username`, `role`, `admin`, `active`) values (?, ?, ?, ?, ?)");
-            patientsStatement.setString(1, medic.getName());
-            patientsStatement.setString(2, medic.getUsername());
-            patientsStatement.setInt(3, medic.getRank().getRank());
-            patientsStatement.setInt(4, medic.getAdmin());
-            patientsStatement.setInt(5, medic.getActive());
-            patientsStatement.executeUpdate();
+            final PreparedStatement medicStatement = this.preparedStatement("insert into `users`(`name`, `username`, `role`, `admin`, `active`, `password`) values (?, ?, ?, ?, ?, ?)");
+            medicStatement.setString(1, medic.getName());
+            medicStatement.setString(2, medic.getUsername());
+            medicStatement.setInt(3, medic.getRank().getRank());
+            medicStatement.setInt(4, medic.getAdmin());
+            medicStatement.setInt(5, medic.getActive());
+            medicStatement.setString(6, password);
+            medicStatement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            Log.error(e.getMessage());
+            Log.stack(e.getStackTrace());
+        }
+        return false;
+    }
+
+    public boolean updateMedic(Medic medic) {
+        try {
+            final PreparedStatement medicStatement = this.preparedStatement("update `users` set `name`=?, `username`=?, `role`=?, `admin`=?, `active`=? where `id`=?");
+            medicStatement.setString(1, medic.getName());
+            medicStatement.setString(2, medic.getUsername());
+            medicStatement.setInt(3, medic.getRank().getRank());
+            medicStatement.setInt(4, medic.getAdmin());
+            medicStatement.setInt(5, medic.getActive());
+            medicStatement.setInt(6, medic.getId());
+            medicStatement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            Log.error(e.getMessage());
+            Log.stack(e.getStackTrace());
+        }
+        return false;
+    }
+
+    public boolean updatePassword(Medic medic, String newPassword) {
+        try {
+            final PreparedStatement medicStatement = this.preparedStatement("update `users` set `password`=? where `id`=?");
+            medicStatement.setString(1, newPassword);
+            medicStatement.setInt(2, medic.getId());
+            medicStatement.executeUpdate();
             return true;
         } catch (SQLException e) {
             Log.error(e.getMessage());

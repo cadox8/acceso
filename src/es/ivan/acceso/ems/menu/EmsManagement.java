@@ -5,6 +5,7 @@ import es.ivan.acceso.ems.Ems;
 import es.ivan.acceso.ems.api.Rank;
 import es.ivan.acceso.ems.database.queries.MedicQuery;
 import es.ivan.acceso.ems.database.queries.PatientQuery;
+import es.ivan.acceso.ems.paginators.MedicsPaginator;
 import es.ivan.acceso.ems.utils.AddPatient;
 import es.ivan.acceso.ems.paginators.PatientsPaginator;
 import es.ivan.acceso.ems.utils.Table;
@@ -24,6 +25,7 @@ public class EmsManagement {
     private final Table table = new Table();
 
     public void showMenu() {
+        Log.clear();
         Log.div();
         Log.success("Bienvenido, " + this.instance.getOwn().getName() + ", al servicio de gestión médica de LATAM");
         Log.normal("Versión del sistema: " + Acceso.getVERSION());
@@ -60,19 +62,33 @@ public class EmsManagement {
                     Log.putBreak(1);
                     break;
                 case 3:
-
+                    Log.putBreak(1);
+                    Log.warning("Esta función estará disponible en uin futuro...");
+                    Log.putBreak(1);
                     break;
                 case 4:
                     if (this.instance.getOwn().getRank() != Rank.JEFE) throw new NoSuchElementException();
 
                     Log.putBreak(1);
-                    Log.normal(this.table.toTable(new MedicQuery().getAllMedics(), Table.TableType.MEDIC));
+                    new MedicsPaginator(this.console, new MedicQuery().getAllMedics());
                     Log.putBreak(1);
-
                     break;
                 case 5:
                     Log.putBreak(1);
-                    Log.normal(this.table.toTable(Collections.singletonList(this.instance.getOwn()), Table.TableType.MEDIC));
+                    Log.normal(this.table.medicsToTable(Collections.singletonList(this.instance.getOwn())));
+                    Log.info("Seleccione una de las siguientes opciones:");
+                    Log.info("[P] -> Cambiar Contraseña | [Cualquier tecla] -> Volver atrás");
+
+                    if (this.console.readLine().equalsIgnoreCase("p")) {
+                        Log.putBreak(1);
+                        Log.normal("Introduzca su nueva contraseña");
+                        if (new MedicQuery().updatePassword(this.instance.getOwn(), new String(this.console.readPassword()))) {
+                            Log.success("Contraseña cambiada");
+                        } else {
+                            Log.error("Ha ocurrido un error al cambiar la contraseña");
+                        }
+                    }
+
                     Log.putBreak(1);
                     break;
                 case 6:

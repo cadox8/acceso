@@ -3,7 +3,13 @@ package es.ivan.acceso.ems.utils;
 import es.ivan.acceso.ems.api.*;
 import es.ivan.acceso.log.Log;
 
+import java.text.DateFormat;
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Table {
 
@@ -23,7 +29,7 @@ public class Table {
      * @param interventions Las intervenciones
      * @return Un String con el valor de los objetos formateados como tabla
      */
-    public String interventionsToTable(List<Interventions> interventions) {
+    public String interventionsToTable(List<Intervention> interventions) {
         return this.toTable(interventions, TableType.INTERVENTIONS);
     }
 
@@ -44,9 +50,11 @@ public class Table {
      * @param type El tipo de objeto que le estamos pasando
      * @return Un String con el valor de los objetos formateados como tabla
      */
-    public String toTable(List<? extends AbstractAPI> objects, TableType type) {
+    private String toTable(List<? extends AbstractAPI> objects, TableType type) {
         final List<String> headers = new ArrayList<>();
         final HashMap<Integer, List<String>> body = new HashMap<>();
+
+        final List<String> spacer = new ArrayList<>();
 
         if (objects.isEmpty()) {
             Log.warning("No hay datos guardados");
@@ -61,43 +69,66 @@ public class Table {
         for (int i = 0; i < objects.size(); i++) {
             int finalI = i;
             final List<String> tempBody = new ArrayList<>();
+
+            // Este contador sólo es usado si el tipo de datos es INTERVENTIONS
+            final AtomicInteger fields = new AtomicInteger(0);
             Arrays.asList(objects.get(i).getClass().getDeclaredFields()).forEach(f -> {
+                // Hacemos que la variable sea accesible para que podamos leerla
                 f.setAccessible(true);
                 try {
-                    tempBody.add(String.valueOf(f.get(objects.get(finalI))));
+                    if (type == TableType.INTERVENTIONS && (fields.get() == 1 || fields.get() == 2)) {
+                        // Comprobamos si 'fields' es igual a 1 (el valor de donde está la variable de médico o la de paciente) y obtenemos su respectivo nombre
+                        tempBody.add(String.valueOf(fields.get() == 1 ? ((Medic)f.get(objects.get(finalI))).getName() : ((Patient)f.get(objects.get(finalI))).getName()));
+                    } else {
+                        tempBody.add(String.valueOf(f.get(objects.get(finalI))));
+                    }
                 } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 }
                 f.setAccessible(false);
+                // Incrementamos la posición de los campos que andamos recorriendo
+                fields.getAndIncrement();
             });
             body.put(i, tempBody);
         }
         // --- ---
 
         // --- Format fields ---
-        if (type == TableType.MEDIC) {
-            body.forEach((id, list) -> {
-                for (int i = 0; i < list.size(); i++) {
-                    switch (i) {
-                        case 3:
-                            list.set(i, Rank.parseRank(Integer.parseInt(list.get(i))).getDisplay());
-                            break;
-                        case 4:
-                        case 5:
-                            list.set(i, list.get(i).equalsIgnoreCase("1") ? "Sí" : "No");
-                            break;
+        switch (type) {
+            case MEDIC:
+                body.forEach((id, list) -> {
+                    for (int i = 0; i < list.size(); i++) {
+                        switch (i) {
+                            case 3:
+                                list.set(i, Rank.parseRank(Integer.parseInt(list.get(i))).getDisplay());
+                                break;
+                            case 4:
+                            case 5:
+                                list.set(i, list.get(i).equalsIgnoreCase("1") ? "Sí" : "No");
+                                break;
+                        }
                     }
-                }
-            });
+                });
+                break;
+            case INTERVENTIONS:
+                body.forEach((id, list) -> list.set(4, DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss").withZone(ZoneId.systemDefault()).format(Instant.parse(list.get(4)))));
+                break;
         }
         // --- ---
 
         // --- Format Length ---
         for (int i = 0; i < headers.size(); i++) {
+            // Obtenemos la longitud máxima de cada columna y ajustamos todos los valores a esa longitud (añadiendo espacios)
             final int maxLength = Math.max(headers.get(i).length(), this.maxLength(body, i));
-            headers.set(i, this.fixLength(headers.get(i), maxLength));
-            int finalI = i;
 
+            headers.set(i, this.fixLength(headers.get(i), maxLength));
+
+            // Añadimos un divisor
+            final StringBuilder space = new StringBuilder();
+            for (int j = 0; j <= maxLength; j++) space.append("-");
+            spacer.add(space.toString());
+
+            int finalI = i;
             body.forEach((id, list) -> {
                 list.set(finalI, this.fixLength(list.get(finalI), maxLength));
                 body.put(id, list);
@@ -107,6 +138,8 @@ public class Table {
 
         final StringBuilder sb = new StringBuilder();
         sb.append(this.formatList(headers));
+        sb.append("\n");
+        sb.append(this.formatList(spacer));
         sb.append("\n");
         body.forEach((id, list) -> sb.append(this.formatList(list)).append("\n"));
 
@@ -148,7 +181,7 @@ public class Table {
     private int maxLength(HashMap<Integer, List<String>> body, int search) {
         final Integer[] lengths = new Integer[body.keySet().size()];
         body.forEach((id, content) -> lengths[id] = content.get(search).length());
-        Arrays.sort(lengths, Comparator.naturalOrder());
+        Arrays.sort(lengths, Comparator.reverseOrder());
         return lengths[0];
     }
 

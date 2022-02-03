@@ -16,10 +16,19 @@ public class AddPatient {
 
     private Patient patient;
 
+    private boolean update;
+
     public void start() {
         this.patient = new Patient();
         this.patient.setId(-1);
+        this.update = false;
         this.askName(true);
+    }
+
+    public void startFromPatient(Patient patient) {
+        this.patient = patient;
+        this.update = true;
+        this.check();
     }
 
     private void askName(boolean next) {
@@ -31,18 +40,17 @@ public class AddPatient {
     private void askPhone(boolean next) {
         Log.normal("Por favor, introduzca el teléfono del paciente:");
         this.patient.setPhone(this.console.readLine());
-        if (next) this.askDob(next);
+        if (next) this.askAge(next);
     }
 
-    private void askDob(boolean next) {
-        Log.normal("Por favor, introduzca la fecha de nacimiento del paciente: [DD/MM/AAAA]");
-        final String[] parts = this.console.readLine().split("/");
+    private void askAge(boolean next) {
+        Log.normal("Por favor, introduzca la edad del paciente:");
         try {
-            this.patient.setDob(new Date(Integer.parseInt(parts[2]), Integer.parseInt(parts[0]) + 1, Integer.parseInt(parts[0])));
+            this.patient.setAge(Integer.parseInt(this.console.readLine()));
         } catch (NumberFormatException e) {
             Log.stack(e.getStackTrace());
             Log.error("Has puesto un número erroneo");
-            this.askDob(next);
+            this.askAge(next);
         }
         if (next) this.askHeight(next);
     }
@@ -95,7 +103,7 @@ public class AddPatient {
                     this.askPhone(false);
                     break;
                 case 3:
-                    this.askDob(false);
+                    this.askAge(false);
                     break;
                 case 4:
                     this.askHeight(false);
@@ -110,10 +118,20 @@ public class AddPatient {
             this.check();
         } catch (NumberFormatException e) {
             if (selection.equalsIgnoreCase("x")) {
-                if (new PatientQuery().addPatient(this.patient)) {
-                    Log.success("Paciente guardado");
+                final PatientQuery patientQuery = new PatientQuery();
+
+                if (this.update) {
+                    if (patientQuery.updatePatient(this.patient)) {
+                        Log.success("Paciente actualizado");
+                    } else {
+                        Log.error("Ha ocurrido un error al actualizar al paciente.");
+                    }
                 } else {
-                    Log.error("Ha ocurrido un error al guardar al paciente.");
+                    if (patientQuery.addPatient(this.patient)) {
+                        Log.success("Paciente guardado");
+                    } else {
+                        Log.error("Ha ocurrido un error al guardar al paciente.");
+                    }
                 }
                 return;
             }

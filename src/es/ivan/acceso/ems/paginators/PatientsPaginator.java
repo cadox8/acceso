@@ -1,8 +1,11 @@
 package es.ivan.acceso.ems.paginators;
 
+import es.ivan.acceso.ems.Ems;
+import es.ivan.acceso.ems.api.Intervention;
 import es.ivan.acceso.ems.api.Patient;
 import es.ivan.acceso.ems.database.queries.InterventionsQuery;
 import es.ivan.acceso.ems.database.queries.PatientQuery;
+import es.ivan.acceso.ems.utils.AddPatient;
 import es.ivan.acceso.ems.utils.Table;
 import es.ivan.acceso.log.Log;
 
@@ -39,7 +42,7 @@ public class PatientsPaginator {
         Log.putBreak(1);
 
         if (this.patients.stream().anyMatch(p -> p.getId() == id)) {
-            Log.normal(this.table.toTable(Collections.singletonList(this.patients.get(id - 1)), Table.TableType.PATIENT));
+            Log.normal(this.table.patientsToTable(Collections.singletonList(this.patients.get(id - 1))));
         } else {
             Log.error("No hay ningún paciente con la Id " + id);
             this.showPatients();
@@ -53,10 +56,17 @@ public class PatientsPaginator {
 
         switch (this.console.readLine()) {
             case "a":
-                // ToDo
+                Log.putBreak(1);
+                Log.normal("Escriba todo el proceso de intervención:");
+                if (new InterventionsQuery().addIntervention(new Intervention(-1, Ems.getInstance().getOwn(), this.patients.get(id - 1), this.console.readLine(), null))) {
+                    Log.success("Intervención guardada");
+                } else {
+                    Log.error("Ha ocurrido un error al guardar la intervención.");
+                }
+                Log.putBreak(1);
                 break;
             case "e":
-                // ToDo
+                new AddPatient(this.console).startFromPatient(this.patients.get(id - 1));
                 break;
             case "v":
                 new InterventionsPaginator(this.console, new InterventionsQuery().getAllInterventionsFromPatient(id));
@@ -76,21 +86,21 @@ public class PatientsPaginator {
     }
 
     public void next() {
-        this.showPatients();
         this.currentPage++;
         if (this.currentPage * 20 > this.patients.size()) this.currentPage = 0;
+        this.showPatients();
     }
 
     public void previous() {
-        this.showPatients();
         this.currentPage--;
         if (this.currentPage < 0) this.currentPage = this.patients.size() / 20;
+        this.showPatients();
     }
 
     private void showPatients() {
         Log.putBreak(1);
         Log.info("[*] Página " + (this.currentPage + 1) + "/" + (this.patients.size() / 20 + 1));
-        Log.normal(this.table.toTable(this.patients.subList(this.currentPage * 20, Math.min(this.patients.size(), 20)), Table.TableType.PATIENT));
+        Log.normal(this.table.patientsToTable(this.patients.subList(this.currentPage * 20, Math.min(this.patients.size(), (this.currentPage + 1) * 20))));
         Log.putBreak(1);
 
         Log.info("Seleccione una de las siguientes opciones:");

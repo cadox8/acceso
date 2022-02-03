@@ -18,12 +18,21 @@ public class AddMedic {
 
     private Medic medic;
 
+    private boolean update;
+
     public void start() {
         this.medic = new Medic();
         this.medic.setId(-1);
         this.medic.setAdmin(0);
         this.medic.setActive(1);
+        this.update = false;
         this.askName(true);
+    }
+
+    public void startFromMedic(Medic medic) {
+        this.medic = medic;
+        this.update = true;
+        this.check();
     }
 
     private void askName(boolean next) {
@@ -76,10 +85,22 @@ public class AddMedic {
             this.check();
         } catch (NumberFormatException e) {
             if (selection.equalsIgnoreCase("x")) {
-                if (new MedicQuery().addMedic(this.medic)) {
-                    Log.success("Médico guardado");
+                final MedicQuery medicQuery = new MedicQuery();
+
+                if (this.update) {
+                    if (medicQuery.updateMedic(this.medic)) {
+                        Log.success("Médico actualizado");
+                    } else {
+                        Log.error("Ha ocurrido un error al actualizar al médico.");
+                    }
                 } else {
-                    Log.error("Ha ocurrido un error al guardar al médico.");
+                    final String password = PasswordGenerator.generatePassword();
+                    if (medicQuery.addMedic(this.medic, password)) {
+                        Log.success("Médico guardado");
+                        Log.warning("La contraseña asignada a " + this.medic.getName() + " es: " + password + "\nRecuerda al usuario que debe cambiarla accediendo a su panel de información");
+                    } else {
+                        Log.error("Ha ocurrido un error al guardar al médico.");
+                    }
                 }
                 return;
             }

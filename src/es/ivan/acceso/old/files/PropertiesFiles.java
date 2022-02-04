@@ -55,6 +55,32 @@ public class PropertiesFiles extends AbstractFile {
     }
 
     /**
+     * Muestra el contenido por consola del archivo buscado
+     *
+     * @param fileName El archivo a buscar
+     */
+    public Properties getFileInfo(String fileName) {
+        final File file = this.getFile(fileName);
+
+        if (file.exists()) {
+            try {
+                System.out.println("\n");
+                final FileReader reader = new FileReader(file);
+                final Properties properties = new Properties();
+                properties.load(reader);
+                reader.close();
+                return properties;
+            } catch (IOException e) {
+                Log.error("Ha ocurrido un error inesperado");
+                Log.stack(e.getStackTrace());
+            }
+        } else {
+            Log.error("No existe un archivo llamado " + fileName + ".properties");
+        }
+        return null;
+    }
+
+    /**
      * Edita una propiedad dentro del archivo
      *
      * @param fileName El archivo donde guardar el contenido

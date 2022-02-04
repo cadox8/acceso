@@ -5,11 +5,15 @@ import es.ivan.acceso.ems.database.Database;
 import es.ivan.acceso.ems.database.queries.LoginQuery;
 import es.ivan.acceso.ems.menu.EmsManagement;
 import es.ivan.acceso.log.Log;
+import es.ivan.acceso.old.files.PropertiesFiles;
 import lombok.Getter;
+import lombok.val;
 
 import java.io.Console;
 import java.sql.SQLException;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Properties;
 
 public class Ems {
 
@@ -34,8 +38,20 @@ public class Ems {
             System.exit(-1);
         }
 
+        final PropertiesFiles mysqlConfig = new PropertiesFiles();
+        final HashMap<String, String> values = new HashMap<>();
+
+        values.put("host", "localhost");
+        values.put("port", "3306");
+        values.put("database", "ems");
+        values.put("user", "root");
+        values.put("password", "");
+
+        mysqlConfig.saveFile("database", values);
+
         try {
-            this.database = new Database("localhost", "root", "ems");
+            final Properties properties = mysqlConfig.getFileInfo("database");
+            this.database = new Database(properties.getProperty("host"), properties.getProperty("port"), properties.getProperty("user"), properties.getProperty("password"), properties.getProperty("database"));
             this.database.openConnection();
         } catch (SQLException | ClassNotFoundException e) {
             Log.error("No se ha podido conectar con la Base de Datos");

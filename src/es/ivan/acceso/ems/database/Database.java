@@ -1,5 +1,6 @@
 package es.ivan.acceso.ems.database;
 
+import es.ivan.acceso.log.Log;
 import lombok.Getter;
 
 import java.sql.Connection;

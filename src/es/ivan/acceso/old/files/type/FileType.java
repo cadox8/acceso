@@ -12,6 +12,8 @@ public enum FileType {
     XML("xml", ".xml"),
     RANDOM("random", PLAIN.ext);
 
-    @Getter private final String folder;
-    @Getter private final String ext;
+    @Getter
+    private final String folder;
+    @Getter
+    private final String ext;
 }

@@ -1,9 +1,9 @@
 package es.ivan.acceso.old.files;
 
+import es.ivan.acceso.log.Log;
 import es.ivan.acceso.old.api.Alumno;
 import es.ivan.acceso.old.api.BinParser;
 import es.ivan.acceso.old.files.type.FileType;
-import es.ivan.acceso.log.Log;
 import es.ivan.acceso.old.utils.Normalize;
 
 import java.io.*;
@@ -67,7 +67,7 @@ public class BinFiles extends AbstractFile {
      * Muestra el contenido por consola del alumno en el archivo buscado
      *
      * @param fileName El archivo a buscar
-     * @param alumno El alumno a ser buscado
+     * @param alumno   El alumno a ser buscado
      * @return True if the alumno exists
      */
     public boolean showAlumno(String fileName, String alumno) {
@@ -145,10 +145,10 @@ public class BinFiles extends AbstractFile {
     /**
      * Edita una propiedad dentro del archivo
      *
-     * @param fileName El archivo donde guardar el contenido
-     * @param alumno La alumno a editar
+     * @param fileName  El archivo donde guardar el contenido
+     * @param alumno    La alumno a editar
      * @param selection La selección de que editar
-     * @param value El valor editado
+     * @param value     El valor editado
      */
     public void editFile(String fileName, String alumno, int selection, String value) {
         final File file = this.getFile(fileName);

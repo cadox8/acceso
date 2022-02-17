@@ -7,25 +7,27 @@ import es.ivan.acceso.ems.menu.EmsManagement;
 import es.ivan.acceso.log.Log;
 import es.ivan.acceso.old.files.PropertiesFiles;
 import lombok.Getter;
-import lombok.val;
 
 import java.io.Console;
 import java.sql.SQLException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Properties;
 
 public class Ems {
 
-    @Getter private static Ems instance;
+    @Getter
+    private static Ems instance;
 
     // --- ---
 
-    @Getter private Console console;
+    @Getter
+    private Console console;
 
-    @Getter private Database database;
+    @Getter
+    private Database database;
 
-    @Getter private Medic own;
+    @Getter
+    private Medic own;
 
     public Ems() {
         instance = this;
@@ -91,7 +93,7 @@ public class Ems {
 
     public void logout() {
         this.own = null;
-        Log.success("Ter has desconectado correctamente");
+        Log.success("Te has desconectado correctamente");
         System.exit(0);
     }
 }

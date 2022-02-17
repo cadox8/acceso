@@ -19,25 +19,12 @@ import java.util.stream.Collectors;
 
 public class Log {
 
-    @RequiredArgsConstructor
-    public enum LogType {
-        NORMAL(""),
-        WARNING("[!] "),
-        ERROR("[X] "),
-        DEBUG("[✎] "),
-        SUCCESS("[✔] "),
-        STACK("[☄] ");
-
-        @Getter private final String prefix;
-    }
-
     private static final ColoredPrinter debug = new ColoredPrinter.Builder(1, true).foreground(Ansi.FColor.MAGENTA).build();
     private static final ColoredPrinter error = new ColoredPrinter.Builder(1, true).foreground(Ansi.FColor.RED).build();
     private static final ColoredPrinter warning = new ColoredPrinter.Builder(1, true).foreground(Ansi.FColor.YELLOW).build();
     private static final ColoredPrinter normal = new ColoredPrinter.Builder(1, true).foreground(Ansi.FColor.NONE).build();
     private static final ColoredPrinter success = new ColoredPrinter.Builder(1, true).foreground(Ansi.FColor.GREEN).build();
     private static final ColoredPrinter div = new ColoredPrinter.Builder(1, true).foreground(Ansi.FColor.CYAN).build();
-
     // Log file
     private static final File logFile = new File("./logs/log_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd_MM_uuuu_HH_mm_ss", Locale.ENGLISH)) + ".log");
 
@@ -46,7 +33,7 @@ public class Log {
      *
      * @param info el mensaje
      */
-    public static void debug(String info){
+    public static void debug(String info) {
         log(debug, LogType.DEBUG, info);
         Log.toFile(LogType.DEBUG.getPrefix() + info);
     }
@@ -138,7 +125,7 @@ public class Log {
 
     /**
      * Método muy simple para limpiar la consola
-     *
+     * <p>
      * *AVISO*: Este método sólo funciona cuando la consola NO es la de IntelliJ, Eclipse o NetBeans, puesto que sus consolas no son reales.
      * Esto borra las consolas de Windows y (debería) Linux
      */
@@ -157,12 +144,12 @@ public class Log {
 
     /**
      * Logs the info
-     * @see LogType
      *
      * @param type el tipo
      * @param info el mensaje
+     * @see LogType
      */
-    private static void log(ColoredPrinter printer, LogType type, String info){
+    private static void log(ColoredPrinter printer, LogType type, String info) {
         printer.setTimestamping(false);
         printer.println(type.getPrefix() + info);
     }
@@ -186,5 +173,18 @@ public class Log {
                 e.printStackTrace();
             }
         }
+    }
+
+    @RequiredArgsConstructor
+    public enum LogType {
+        NORMAL(""),
+        WARNING("[!] "),
+        ERROR("[X] "),
+        DEBUG("[✎] "),
+        SUCCESS("[✔] "),
+        STACK("[☄] ");
+
+        @Getter
+        private final String prefix;
     }
 }

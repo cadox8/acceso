@@ -1,8 +1,8 @@
 package es.ivan.acceso.old.files;
 
+import es.ivan.acceso.log.Log;
 import es.ivan.acceso.old.api.XMLGenerator;
 import es.ivan.acceso.old.files.type.FileType;
-import es.ivan.acceso.log.Log;
 import es.ivan.acceso.old.utils.Normalize;
 import lombok.NonNull;
 import org.w3c.dom.*;
@@ -10,11 +10,16 @@ import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.*;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Scanner;
 
 public class XMLFiles extends AbstractFile {
 
@@ -63,9 +68,9 @@ public class XMLFiles extends AbstractFile {
     /**
      * Método para crear nuevos documentos XML
      *
-     * @param fileName El nombre del archivo
+     * @param fileName   El nombre del archivo
      * @param parentNode El nodo padre
-     * @param scanner El Scanner del menú
+     * @param scanner    El Scanner del menú
      */
     public void writeNewXML(String fileName, String parentNode, Scanner scanner) {
         final File file = this.getFile(fileName);
@@ -99,12 +104,11 @@ public class XMLFiles extends AbstractFile {
     /**
      * Método para preguntar si queremos añadir hijos/hermanos y crearlos! Tambien sirve para comentarios
      *
-     * @param scanner El scanner del menu
+     * @param scanner      El scanner del menu
      * @param xmlGenerator Una instancia de mi XMLGenerator
-     * @param type El tipo de nodo que estoy creado. 0 -> Hijo | 1 -> Hermano
-     * @param line La línea introducida por consola
+     * @param type         El tipo de nodo que estoy creado. 0 -> Hijo | 1 -> Hermano
+     * @param line         La línea introducida por consola
      * @return Una instancia de mi XMLGenerator
-     *
      * @see XMLGenerator
      */
     private XMLGenerator ask4Child(Scanner scanner, XMLGenerator xmlGenerator, int type, String line) {
@@ -163,7 +167,7 @@ public class XMLFiles extends AbstractFile {
 
     /**
      * Método para parsear los atributos
-     *
+     * <p>
      * *Importante*: Los atributos debem seguir el esquema (atributo=valor atributo2=valor2)
      *
      * @param attributesString Los atributos que residen entre los ()
@@ -182,7 +186,7 @@ public class XMLFiles extends AbstractFile {
      * Muestra los hijos de cada Nodo
      *
      * @param parent El Nodo padre
-     * @param tabs Las tabulaciones a pasar para imprimir
+     * @param tabs   Las tabulaciones a pasar para imprimir
      */
     private void showChildren(@NonNull Node parent, int tabs) {
         // Si no tien hijos adios
@@ -219,7 +223,8 @@ public class XMLFiles extends AbstractFile {
             // Leemos el contenido
             final Node content = child.getChildNodes().item(0);
             // Comprobamos que el contenido no sea nulo, que no sea un nodo y que no este vacio. Si se cumple todo, se añade
-            if (content != null && content.getNodeType() != Node.ELEMENT_NODE && !content.getTextContent().trim().isEmpty()) sb.append(": ").append(content.getTextContent());
+            if (content != null && content.getNodeType() != Node.ELEMENT_NODE && !content.getTextContent().trim().isEmpty())
+                sb.append(": ").append(content.getTextContent());
 
             Log.normal(this.generateSpacer(tabs) + sb);
             sb.delete(0, sb.length());

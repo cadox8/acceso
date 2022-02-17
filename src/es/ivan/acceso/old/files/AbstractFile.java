@@ -1,7 +1,7 @@
 package es.ivan.acceso.old.files;
 
-import es.ivan.acceso.old.files.type.FileType;
 import es.ivan.acceso.log.Log;
+import es.ivan.acceso.old.files.type.FileType;
 
 import java.io.File;
 import java.util.Arrays;

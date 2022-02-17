@@ -19,10 +19,8 @@ public class PatientsPaginator {
 
     private final List<Patient> patients;
     private final Table table;
-
-    private int currentPage;
-
     private final PatientQuery patientQuery;
+    private int currentPage;
 
     public PatientsPaginator(Console console, List<Patient> patients) {
         this.console = console;

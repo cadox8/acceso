@@ -10,8 +10,10 @@ import java.sql.SQLException;
 
 public abstract class AbstractQuery {
 
-    @Getter private final Ems instance;
-    @Getter private final Database database;
+    @Getter
+    private final Ems instance;
+    @Getter
+    private final Database database;
 
     public AbstractQuery() {
         this.instance = Ems.getInstance();

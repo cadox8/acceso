@@ -1,7 +1,7 @@
 package es.ivan.acceso.old.files;
 
-import es.ivan.acceso.old.files.type.FileType;
 import es.ivan.acceso.log.Log;
+import es.ivan.acceso.old.files.type.FileType;
 
 import java.io.File;
 import java.io.FileReader;
@@ -40,7 +40,7 @@ public class PropertiesFiles extends AbstractFile {
                 properties.load(reader);
 
                 final Enumeration<Object> keys = properties.keys();
-                while (keys.hasMoreElements()){
+                while (keys.hasMoreElements()) {
                     final Object key = keys.nextElement();
                     Log.normal(key + "=" + properties.get(key));
                 }
@@ -84,8 +84,8 @@ public class PropertiesFiles extends AbstractFile {
      * Edita una propiedad dentro del archivo
      *
      * @param fileName El archivo donde guardar el contenido
-     * @param key La key a editar
-     * @param value El valor editado
+     * @param key      La key a editar
+     * @param value    El valor editado
      */
     public void editFile(String fileName, String key, String value) {
         final File file = this.getFile(fileName);
@@ -126,7 +126,7 @@ public class PropertiesFiles extends AbstractFile {
      * Escribe el contenido dentro del archivo
      *
      * @param fileName El archivo donde guardar el contenido
-     * @param proper Las propiedades que tiene el archivo a ser escrito
+     * @param proper   Las propiedades que tiene el archivo a ser escrito
      */
     public void saveFile(String fileName, HashMap<String, String> proper) {
         final File file = this.getFile(fileName);
@@ -152,7 +152,7 @@ public class PropertiesFiles extends AbstractFile {
                 Log.success("Archivo guardado");
             } catch (IOException e) {
                 Log.error("Ha ocurrido un error inesperado");
-               Log.stack(e.getStackTrace());
+                Log.stack(e.getStackTrace());
             }
         } else {
             Log.error("Ya existe un archivo llamado " + fileName + ".properties");

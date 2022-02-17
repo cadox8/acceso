@@ -1,12 +1,12 @@
 package es.ivan.acceso.old.files;
 
+import es.ivan.acceso.log.Log;
 import es.ivan.acceso.old.api.Alumno;
 import es.ivan.acceso.old.files.type.FileType;
-import es.ivan.acceso.log.Log;
 
 import java.io.*;
 
-public class  RandomFiles extends AbstractFile {
+public class RandomFiles extends AbstractFile {
 
     /**
      * Constructor principal de la clase.
@@ -33,11 +33,11 @@ public class  RandomFiles extends AbstractFile {
                 final RandomAccessFile access = new RandomAccessFile(file, "r");
                 access.seek(0);
 
-                final byte[] bytes = new byte[(int)access.length()];
+                final byte[] bytes = new byte[(int) access.length()];
 
                 access.readFully(bytes);
 
-                Log.normal(((Alumno)new ObjectInputStream(new ByteArrayInputStream(bytes)).readObject()).toString());
+                Log.normal(new ObjectInputStream(new ByteArrayInputStream(bytes)).readObject().toString());
 
                 access.close();
             } catch (IOException | ClassNotFoundException e) {
@@ -53,7 +53,7 @@ public class  RandomFiles extends AbstractFile {
      * Escribe el contenido dentro del archivo
      *
      * @param fileName El archivo donde guardar el contenido
-     * @param content El contenido a ser guardado
+     * @param content  El contenido a ser guardado
      */
     public void saveFile(String fileName, Alumno content) {
         final File file = this.getFile(fileName);

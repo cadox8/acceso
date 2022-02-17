@@ -15,10 +15,8 @@ public class InterventionsPaginator {
 
     private final List<Intervention> interventions;
     private final Table table;
-
-    private int currentPage;
-
     private final InterventionsQuery interventionsQuery;
+    private int currentPage;
 
     public InterventionsPaginator(Console console, List<Intervention> interventions) {
         this.console = console;

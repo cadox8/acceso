@@ -1,8 +1,5 @@
 package es.ivan.acceso.ems.database;
 
-import es.ivan.acceso.log.Log;
-import lombok.Getter;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -20,9 +17,11 @@ public class Database {
     public Database(String hostname, String username, String database) {
         this(hostname, username, "", database);
     }
+
     public Database(String hostname, String username, String password, String database) {
         this(hostname, "3306", username, password, database);
     }
+
     public Database(String hostname, String port, String username, String password, String database) {
         this.hostname = hostname;
         this.port = port;

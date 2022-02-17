@@ -1,7 +1,7 @@
 package es.ivan.acceso.old.files;
 
-import es.ivan.acceso.old.files.type.FileType;
 import es.ivan.acceso.log.Log;
+import es.ivan.acceso.old.files.type.FileType;
 
 import java.io.*;
 
@@ -31,7 +31,7 @@ public class PlainFiles extends AbstractFile {
                 System.out.println("\n");
                 final BufferedReader br = new BufferedReader(new FileReader(file));
                 String line;
-                while((line = br.readLine()) != null) Log.normal(line);
+                while ((line = br.readLine()) != null) Log.normal(line);
                 br.close();
             } catch (IOException e) {
                 Log.error("Ha ocurrido un error inesperado");
@@ -46,7 +46,7 @@ public class PlainFiles extends AbstractFile {
      * Escribe el contenido dentro del archivo
      *
      * @param fileName El archivo donde guardar el contenido
-     * @param content El contenido a ser guardado
+     * @param content  El contenido a ser guardado
      */
     public void saveFile(String fileName, String content) {
         final File file = this.getFile(fileName);

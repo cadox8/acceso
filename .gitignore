@@ -12,4 +12,4 @@ out/*
 pom.xml
 build/logs
 
-*.log
+*.log!/out/artifacts/Acceso_jar/Acceso.jar

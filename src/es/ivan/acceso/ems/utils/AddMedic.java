@@ -1,15 +1,12 @@
 package es.ivan.acceso.ems.utils;
 
 import es.ivan.acceso.ems.api.Medic;
-import es.ivan.acceso.ems.api.Patient;
 import es.ivan.acceso.ems.database.queries.MedicQuery;
-import es.ivan.acceso.ems.database.queries.PatientQuery;
 import es.ivan.acceso.log.Log;
 import lombok.RequiredArgsConstructor;
 
 import java.io.Console;
 import java.util.Collections;
-import java.util.Date;
 
 @RequiredArgsConstructor
 public class AddMedic {

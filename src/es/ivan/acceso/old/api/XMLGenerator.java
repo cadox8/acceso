@@ -17,7 +17,8 @@ public class XMLGenerator {
     private final Element root;
 
     // Guardo el elemento último para su futuro uso
-    @Getter private Element lastElement;
+    @Getter
+    private Element lastElement;
 
     /**
      * Constructor de la clase que me genera el DOM
@@ -48,7 +49,7 @@ public class XMLGenerator {
     /**
      * Método usado para generar hijos del elemento ROOT
      *
-     * @param parent El padre del que depende
+     * @param parent   El padre del que depende
      * @param children El nombre del hijo
      * @return Esta instancia
      */
@@ -59,7 +60,7 @@ public class XMLGenerator {
     /**
      * Método usado para generar hijos del elemento último
      *
-     * @param children El nombre del hijo
+     * @param children   El nombre del hijo
      * @param attributes Los atributos del elemento
      * @return Esta instancia
      */
@@ -70,8 +71,8 @@ public class XMLGenerator {
     /**
      * Método usado para generar hijos del elemento último
      *
-     * @param parent El padre del que depende
-     * @param children El nombre del hijo
+     * @param parent     El padre del que depende
+     * @param children   El nombre del hijo
      * @param attributes Los atributos del elemento
      * @return Esta instancia
      */
@@ -87,7 +88,7 @@ public class XMLGenerator {
      * Método usado para generar hijos del elemento root
      *
      * @param children El nombre del hijo
-     * @param value El contenido del elemento
+     * @param value    El contenido del elemento
      * @return Esta instancia
      */
     public XMLGenerator addChildrenValue(String children, String value) {
@@ -97,9 +98,9 @@ public class XMLGenerator {
     /**
      * Método usado para generar hijos del elemento último
      *
-     * @param parent El padre del que depende
+     * @param parent   El padre del que depende
      * @param children El nombre del hijo
-     * @param value El contenido del elemento
+     * @param value    El contenido del elemento
      * @return Esta instancia
      */
     public XMLGenerator addChildrenValue(Element parent, String children, String value) {
@@ -109,8 +110,8 @@ public class XMLGenerator {
     /**
      * Método usado para generar hijos del elemento último
      *
-     * @param children El nombre del hijo
-     * @param value El contenido del elemento
+     * @param children   El nombre del hijo
+     * @param value      El contenido del elemento
      * @param attributes Los atributos del elemento
      * @return Esta instancia
      */
@@ -121,9 +122,9 @@ public class XMLGenerator {
     /**
      * Método usado para generar hijos del elemento último
      *
-     * @param parent El padre del que depende
-     * @param children El nombre del hijo
-     * @param value El contenido del elemento
+     * @param parent     El padre del que depende
+     * @param children   El nombre del hijo
+     * @param value      El contenido del elemento
      * @param attributes Los atributos del elemento
      * @return Esta instancia
      */
@@ -137,11 +138,12 @@ public class XMLGenerator {
     }
 
     // --- Siblings ---
+
     /**
      * Método usado para generar hermanos del elemento
      *
      * @param sibling El hermano del que depende
-     * @param name El nombre del hermano
+     * @param name    El nombre del hermano
      * @return Esta instancia
      */
     public XMLGenerator addSibling(Element sibling, String name) {
@@ -151,7 +153,7 @@ public class XMLGenerator {
     /**
      * Método usado para generar hermanos del elemento último
      *
-     * @param name El nombre del hermano
+     * @param name       El nombre del hermano
      * @param attributes los atributos del elemento
      * @return Esta instancia
      */
@@ -162,8 +164,8 @@ public class XMLGenerator {
     /**
      * Método usado para generar hermanos del elemento último
      *
-     * @param sibling El nodo del que va a ser hermano
-     * @param name El nombre del hermano
+     * @param sibling    El nodo del que va a ser hermano
+     * @param name       El nombre del hermano
      * @param attributes los atributos del elemento
      * @return Esta instancia
      */
@@ -179,8 +181,8 @@ public class XMLGenerator {
      * Método usado para generar hermanos del elemento último
      *
      * @param sibling El nodo del que va a ser hermano
-     * @param name El nombre del hermano
-     * @param value El valor del nodo
+     * @param name    El nombre del hermano
+     * @param value   El valor del nodo
      * @return Esta instancia
      */
     public XMLGenerator addSiblingValue(Element sibling, String name, String value) {
@@ -190,8 +192,8 @@ public class XMLGenerator {
     /**
      * Método usado para generar hermanos del elemento último
      *
-     * @param name El nombre del hermano
-     * @param value El valor del nodo
+     * @param name       El nombre del hermano
+     * @param value      El valor del nodo
      * @param attributes Los tributos del elemento
      * @return Esta instancia
      */
@@ -202,9 +204,9 @@ public class XMLGenerator {
     /**
      * Método usado para generar hermanos del elemento último
      *
-     * @param sibling El elemento del que va a ser hermano
-     * @param name El nombre del hermano
-     * @param value El valor del nodo
+     * @param sibling    El elemento del que va a ser hermano
+     * @param name       El nombre del hermano
+     * @param value      El valor del nodo
      * @param attributes Los tributos del elemento
      * @return Esta instancia
      */

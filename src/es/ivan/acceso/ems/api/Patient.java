@@ -3,9 +3,6 @@ package es.ivan.acceso.ems.api;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-
-import java.util.Date;
 
 @Data
 @AllArgsConstructor

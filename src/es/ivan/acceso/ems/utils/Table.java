@@ -3,11 +3,9 @@ package es.ivan.acceso.ems.utils;
 import es.ivan.acceso.ems.api.*;
 import es.ivan.acceso.log.Log;
 
-import java.text.DateFormat;
 import java.time.Instant;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -47,7 +45,7 @@ public class Table {
      * Método para generar una tabla (con cabecera) a partir de una lista de objetos
      *
      * @param objects Los objetos que queremos mostrar como tabla
-     * @param type El tipo de objeto que le estamos pasando
+     * @param type    El tipo de objeto que le estamos pasando
      * @return Un String con el valor de los objetos formateados como tabla
      */
     private String toTable(List<? extends AbstractAPI> objects, TableType type) {
@@ -78,7 +76,7 @@ public class Table {
                 try {
                     if (type == TableType.INTERVENTIONS && (fields.get() == 1 || fields.get() == 2)) {
                         // Comprobamos si 'fields' es igual a 1 (el valor de donde está la variable de médico o la de paciente) y obtenemos su respectivo nombre
-                        tempBody.add(String.valueOf(fields.get() == 1 ? ((Medic)f.get(objects.get(finalI))).getName() : ((Patient)f.get(objects.get(finalI))).getName()));
+                        tempBody.add(String.valueOf(fields.get() == 1 ? ((Medic) f.get(objects.get(finalI))).getName() : ((Patient) f.get(objects.get(finalI))).getName()));
                     } else {
                         tempBody.add(String.valueOf(f.get(objects.get(finalI))));
                     }
@@ -161,7 +159,7 @@ public class Table {
     /**
      * Método para ajustar la longitud de cada campo al valor máximo
      *
-     * @param text El texto para ajustar
+     * @param text   El texto para ajustar
      * @param length La longitud final del texto a ajustar
      * @return El texto ajustado a la longitud
      */
@@ -174,7 +172,7 @@ public class Table {
     /**
      * Método para calcular la máxima longitud de cada campo de la lista con respecto a todos los campos de todas las listas del HashMap
      *
-     * @param body El HashMap con todas las listas
+     * @param body   El HashMap con todas las listas
      * @param search El índice de la lista que estamos comparando
      * @return La máxima longitud de cada campo de la lista con respecto a todos los campos de todas las listas del HashMap
      */

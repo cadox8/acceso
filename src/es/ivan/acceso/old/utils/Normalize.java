@@ -20,7 +20,7 @@ public enum Normalize {
 
     public static String normalizeWord(String word) {
         final StringBuilder sb = new StringBuilder();
-        
+
         Arrays.asList(word.split("")).forEach(c -> {
             boolean replaced = false;
             boolean isUpper = Character.isUpperCase(c.charAt(0));

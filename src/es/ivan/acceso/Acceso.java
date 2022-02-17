@@ -1,14 +1,13 @@
 package es.ivan.acceso;
 
-import es.ivan.acceso.old.menu.MainMenu;
 import es.ivan.acceso.log.Log;
+import es.ivan.acceso.old.menu.MainMenu;
 import lombok.Getter;
-
-import java.io.*;
 
 public class Acceso {
 
-    @Getter private static String VERSION = "3.1.0";
+    @Getter
+    private static final String VERSION = "3.1.0";
 
     /**
      * Main class & method to start the program

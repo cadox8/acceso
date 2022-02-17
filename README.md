@@ -1,5 +1,12 @@
 # Acceso
 
+# Tabla de contenidos
+- [Requisitos](#requisitos)
+  - [IntelliJ](#intellij)
+  - [NetBeans](#netbeans)
+  - [Eclipse](#eclipse)
+- [Ejecución](#ejecucin)
+
 ## Requisitos
 Para poder ejecutar este código es obligatorio tener (mínimo) JAVA 8 instalado y cargar el pom.xml (Descargar librerias Lombok y JCDP).
 
@@ -23,6 +30,5 @@ cd build
 java -jar ./Acceso.jar
 ```
 
-## Info extra
-Se que no estoy usando bien Git, ya que tendría que tener la rama `master` y la rama `development` (como míninmo) para desarrollar el código en la `development` y, al ser funcional, 
-mandárselo a la `master` como pull request, pero de momento se queda así :kissing_heart:.
+**AVISO** Para poder entrar en el apartado de la conexión con la base de datos debe usarse
+una consola real, no es válida la consola de los IDE.

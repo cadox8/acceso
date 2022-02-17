@@ -16,8 +16,10 @@ public enum Rank {
     CELADOR(0, "Celador");
 
 
-    @Getter private final int rank;
-    @Getter private final String display;
+    @Getter
+    private final int rank;
+    @Getter
+    private final String display;
 
     public static Rank parseRank(int rank) {
         return Arrays.stream(Rank.values()).filter(r -> r.getRank() == rank).findAny().orElse(JEFE);

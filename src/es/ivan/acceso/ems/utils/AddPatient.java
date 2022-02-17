@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 
 import java.io.Console;
 import java.util.Collections;
-import java.util.Date;
 
 @RequiredArgsConstructor
 public class AddPatient {

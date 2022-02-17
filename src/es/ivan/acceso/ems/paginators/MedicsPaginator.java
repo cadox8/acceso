@@ -2,7 +2,6 @@ package es.ivan.acceso.ems.paginators;
 
 import es.ivan.acceso.ems.api.Medic;
 import es.ivan.acceso.ems.database.queries.MedicQuery;
-import es.ivan.acceso.ems.database.queries.PatientQuery;
 import es.ivan.acceso.ems.utils.AddMedic;
 import es.ivan.acceso.ems.utils.Table;
 import es.ivan.acceso.log.Log;
@@ -17,10 +16,8 @@ public class MedicsPaginator {
 
     private final List<Medic> medics;
     private final Table table;
-
-    private int currentPage;
-
     private final MedicQuery medicQuery;
+    private int currentPage;
 
     public MedicsPaginator(Console console, List<Medic> medics) {
         this.console = console;

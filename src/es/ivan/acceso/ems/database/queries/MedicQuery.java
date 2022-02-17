@@ -1,10 +1,8 @@
 package es.ivan.acceso.ems.database.queries;
 
 import es.ivan.acceso.ems.api.Medic;
-import es.ivan.acceso.ems.api.Patient;
 import es.ivan.acceso.log.Log;
 
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;

@@ -19,7 +19,7 @@ public class BinParser extends ObjectInputStream {
     /**
      * Constructor
      *
-     * @param in El imput Stream
+     * @param in           El imput Stream
      * @param oldNameSpace El antiguo paquete
      * @param newNameSpace El paquete nuevo
      * @throws IOException
@@ -48,7 +48,7 @@ public class BinParser extends ObjectInputStream {
                 suidField.setAccessible(true);
                 suidField.set(result, localClassDescriptor.getSerialVersionUID());
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             Log.clear();
             Log.error("Error al intentar reemplazar el namespace");
             Log.stack(e.getStackTrace());

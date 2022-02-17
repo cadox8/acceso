@@ -1,7 +1,7 @@
 package es.ivan.acceso.old.menu;
 
-import es.ivan.acceso.old.files.BinFiles;
 import es.ivan.acceso.log.Log;
+import es.ivan.acceso.old.files.BinFiles;
 
 import java.util.NoSuchElementException;
 import java.util.Scanner;

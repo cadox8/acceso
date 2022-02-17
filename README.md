@@ -1,6 +1,8 @@
 # Acceso
 
-# Tabla de contenidos
+Este proyecto ha sido realizado para la asignatura de Acceso a Datos de 2º DAM.
+
+## Tabla de contenidos
 - [Requisitos](#requisitos)
   - [IntelliJ](#intellij)
   - [NetBeans](#netbeans)
